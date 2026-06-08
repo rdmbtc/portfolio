@@ -422,7 +422,7 @@ function Hero() {
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none z-20">
           <div className={`max-w-4xl pointer-events-auto t-stagger ${isShown ? "is-shown" : ""}`}>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1 text-xs text-muted-foreground backdrop-blur-md t-stagger-line t-stagger-line--1">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1 text-xs text-foreground/80 dark:text-muted-foreground backdrop-blur-md t-stagger-line t-stagger-line--1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Available for new work · Q3 2026
             </div>
@@ -436,19 +436,19 @@ function Hero() {
                 {phrases[phraseIdx]}
               </span>
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-balance text-sm sm:text-base md:text-lg text-muted-foreground t-stagger-line t-stagger-line--3 leading-relaxed">
+            <p className="mx-auto mt-6 max-w-2xl text-balance text-sm sm:text-base md:text-lg text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--3 leading-relaxed">
               I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.
             </p>
-            <p className="mt-4 text-sm sm:text-base text-muted-foreground t-stagger-line t-stagger-line--4">
+            <p className="mt-4 text-sm sm:text-base text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--4">
               <span className="typing font-mono text-sm sm:text-base">therdm.dev</span>
             </p>
           </div>
 
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
-            <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground backdrop-blur-md">
+            <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-foreground/80 dark:text-muted-foreground backdrop-blur-md">
               scroll-driven · 240 frames · canvas
             </p>
-            <p className="animate-bounce font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground/85">
+            <p className="animate-bounce font-mono text-[11px] sm:text-xs uppercase tracking-widest text-foreground/75 dark:text-muted-foreground/85">
               ↓ scroll
             </p>
           </div>
