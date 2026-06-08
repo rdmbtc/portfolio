@@ -418,10 +418,10 @@ function Hero() {
       <ScrollSequence
         frameCount={240}
         framePath={heroFramePath}
-        canvasClassName="filter blur-[10px] scale-105 brightness-[1.15] opacity-65 dark:brightness-[0.25] dark:opacity-100 transition-all duration-300"
+        canvasClassName="filter blur-[10px] scale-105 brightness-[1.02] opacity-55 dark:brightness-[0.25] dark:opacity-100 transition-all duration-300"
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none z-20">
-          <div className={`max-w-4xl pointer-events-auto t-stagger ${isShown ? "is-shown" : ""}`}>
+          <div className={`w-full max-w-4xl pointer-events-auto t-stagger ${isShown ? "is-shown" : ""} p-8 sm:p-12 md:p-14 rounded-[32px] border border-border/60 bg-background/55 dark:bg-background/25 backdrop-blur-2xl shadow-[0_24px_60px_-15px_oklch(0.15_0.005_260_/_0.05)] dark:shadow-[0_24px_60px_-15px_rgba(0,0,0,0.45)]`}>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1 text-xs text-foreground/80 dark:text-muted-foreground backdrop-blur-md t-stagger-line t-stagger-line--1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Available for new work · Q3 2026
