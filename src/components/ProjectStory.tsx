@@ -67,7 +67,11 @@ export default function ProjectStory({ repo, index, onOpen }: Props) {
   const screens = [
     { label: "Intro", title: repo.name, body: repo.description ?? "" },
     { label: "What it does", title: "Built for impact", body: repo.readme ?? repo.description ?? "Open project for details." },
-    { label: "Stack", title: "Crafted with", body: [repo.language, ...repo.tags].filter(Boolean).join(" · ") },
+    { 
+      label: "Stack", 
+      title: "Crafted with", 
+      body: `Leverages a highly considered stack optimized for performance, security, and exceptional user experience. Engineered with ${repo.language || "modern technologies"} and integrated with ${repo.tags.join(" · ")}.` 
+    },
   ];
 
   return (

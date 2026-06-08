@@ -54,6 +54,7 @@ export const repos: Repo[] = [
     url: "https://github.com/rdmbtc/Hivemind", 
     homepage: "https://hivemind-theta.vercel.app", 
     tags: t("ai","platform","collab"),
+    readme: "Hivemind is a decentralized collective intelligence platform that aggregates community wisdom for decision-making. Built with React and TypeScript, Hivemind integrates AI agents to synthesize discussions and generate consensus reports dynamically on-chain.",
     screenshots: ["/hivemind-protocol.vercel.app_(pc).png"]
   },
   { 
@@ -64,6 +65,7 @@ export const repos: Repo[] = [
     url: "https://github.com/rdmbtc/RitualPulse", 
     homepage: "https://ritual-pulse-five.vercel.app", 
     tags: t("productivity","tracker","mobile"),
+    readme: "RitualPulse is an elegant daily habit tracker designed to help users build consistent routines. Features interactive calendar heatmaps, customizable reminder pulses, and visual performance tracking logs with local secure state persistence.",
     screenshots: ["/ritualblocks.vercel.app_(pc) (2).png"]
   },
   { 
@@ -74,6 +76,7 @@ export const repos: Repo[] = [
     url: "https://github.com/rdmbtc/RitualScroll", 
     homepage: "https://ritual-scroll.vercel.app", 
     tags: t("storytelling","animation","gsap"),
+    readme: "RitualScroll is an immersive, scroll-driven storytelling web experience. Showcases advanced typography setups and fluid canvas-rendering scroll scrub loops built using GSAP, ScrollTrigger, and Tailwind CSS.",
     screenshots: ["/ritualscroll.vercel.app_(pc) (1).png"]
   },
   { 
@@ -84,6 +87,7 @@ export const repos: Repo[] = [
     url: "https://github.com/rdmbtc/RitCode", 
     homepage: "https://rit-code.vercel.app", 
     tags: t("editor","tool","dx"),
+    readme: "RitCode is a high-performance online code editor playground. Enables developers to write, compile, and preview code snippets in real-time with full syntax highlighting, automatic error linting, and sandboxed execution environments.",
     screenshots: ["/rit-code.png"]
   },
   { name: "RitDefense", description: "Tower defense game in JS.", language: "JavaScript", stars: 0, url: "https://github.com/rdmbtc/RitDefense", homepage: "https://rit-defense.vercel.app", tags: t("game") },
