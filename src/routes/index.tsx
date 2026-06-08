@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Github, Mail, Linkedin, Check, ArrowUpRight, Star, ExternalLink, Search, X } from "lucide-react";
 import ScrollSequence from "@/components/ScrollSequence";
 import HorizontalScroll from "@/components/HorizontalScroll";
@@ -121,7 +121,11 @@ function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/75 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-        <a href="#top" className="text-sm font-semibold tracking-tight">RDM<span className="text-muted-foreground">.dev</span></a>
+        <a href="#top" className="text-sm font-semibold tracking-tight">
+          <span className="t-shimmer" data-text="RDM.dev">
+            RDM<span className="text-muted-foreground">.dev</span>
+          </span>
+        </a>
         <nav className="hidden gap-8 text-sm text-muted-foreground sm:flex">
           <a href="#work" className="hover:text-foreground transition-colors">Work</a>
           <a href="#repos" className="hover:text-foreground transition-colors">Repos</a>
@@ -129,8 +133,11 @@ function Nav() {
           <a href="#about" className="hover:text-foreground transition-colors">About</a>
           <a href="#contact" className="hover:text-foreground transition-colors">Contact</a>
         </nav>
-        <a href="#contact" className="rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90 transition-opacity">
+        <a href="#contact" className="rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90 transition-opacity relative">
           Get in touch
+          <span className="t-badge" data-open="true">
+            <span className="t-badge-dot h-1.5 w-1.5 rounded-full bg-emerald-400 border border-background" />
+          </span>
         </a>
       </div>
     </header>
@@ -138,24 +145,29 @@ function Nav() {
 }
 
 function Hero() {
+  const [isShown, setIsShown] = useState(false);
+  useEffect(() => {
+    setIsShown(true);
+  }, []);
+
   return (
     <section id="top" className="relative">
       {/* Intro */}
-      <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-16 text-center sm:pt-32">
-        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3 py-1 text-xs text-muted-foreground">
+      <div className={`relative mx-auto max-w-6xl px-6 pt-24 pb-16 text-center sm:pt-32 t-stagger ${isShown ? "is-shown" : ""}`}>
+        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3 py-1 text-xs text-muted-foreground t-stagger-line t-stagger-line--1">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           Available for new work · Q3 2026
         </div>
-        <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-7xl">
+        <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-7xl t-stagger-line t-stagger-line--2">
           Clean, modern web products,<br />shipped with care.
         </h1>
-        <p className="mx-auto mt-6 max-w-xl text-balance text-base text-muted-foreground sm:text-lg">
+        <p className="mx-auto mt-6 max-w-xl text-balance text-base text-muted-foreground sm:text-lg t-stagger-line t-stagger-line--3">
           I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.
         </p>
-        <p className="mt-4 text-sm text-muted-foreground">
+        <p className="mt-4 text-sm text-muted-foreground t-stagger-line t-stagger-line--4">
           <span className="typing font-mono">therdm.dev</span>
         </p>
-        <p className="mt-10 animate-bounce font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        <p className="mt-10 animate-bounce font-mono text-xs uppercase tracking-widest text-muted-foreground t-stagger-line t-stagger-line--5">
           ↓ scroll
         </p>
       </div>
@@ -196,12 +208,25 @@ function Skills() {
 }
 
 function Stats() {
+  const [isAnimating, setIsAnimating] = useState(false);
+  useEffect(() => {
+    setIsAnimating(true);
+  }, []);
+
   return (
     <section className="border-y border-border bg-secondary/30">
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px bg-border sm:grid-cols-4">
         {stats.map((s) => (
           <div key={s.label} className="bg-background px-6 py-10 text-center">
-            <div className="text-3xl font-semibold tracking-tight sm:text-4xl">{s.value}</div>
+            <div className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              <span className={`t-digit-group ${isAnimating ? "is-animating" : ""}`}>
+                {s.value.split("").map((char, index) => (
+                  <span key={index} className="t-digit" data-stagger={index + 1}>
+                    {char}
+                  </span>
+                ))}
+              </span>
+            </div>
             <div className="mt-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{s.label}</div>
           </div>
         ))}
@@ -331,6 +356,11 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [sort, setSort] = useState<"name" | "stars">("stars");
 
+  const [isShaking, setIsShaking] = useState(false);
+  const prevCount = useRef(0);
+  const sortContainerRef = useRef<HTMLDivElement>(null);
+  const [pillStyle, setPillStyle] = useState<React.CSSProperties>({ left: 0, width: 0, opacity: 0 });
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     let list = items.filter((r) => {
@@ -350,6 +380,26 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
     return list;
   }, [items, query, activeTag, sort]);
 
+  useEffect(() => {
+    const container = sortContainerRef.current;
+    if (!container) return;
+    const activeBtn = container.querySelector(`[aria-selected="true"]`) as HTMLButtonElement;
+    if (activeBtn) {
+      setPillStyle({
+        transform: `translateX(${activeBtn.offsetLeft}px)`,
+        width: `${activeBtn.offsetWidth}px`,
+        opacity: 1,
+      });
+    }
+  }, [sort]);
+
+  useEffect(() => {
+    if (query && filtered.length === 0 && prevCount.current > 0) {
+      setIsShaking(true);
+    }
+    prevCount.current = filtered.length;
+  }, [filtered.length, query]);
+
   return (
     <section id="repos" className="mx-auto max-w-6xl px-6 py-28">
       <div className="flex items-end justify-between gap-6">
@@ -362,30 +412,40 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
 
       {/* Search + sort */}
       <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by name, language, tag…"
-            className="h-11 rounded-full border-border bg-card pl-10 pr-10"
-          />
+        <div className={`relative flex-1 t-input-wrap ${filtered.length === 0 && query ? "is-error" : ""}`}>
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
+          <div
+            className={`t-input ${isShaking ? "is-shaking" : ""}`}
+            onAnimationEnd={() => setIsShaking(false)}
+          >
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by name, language, tag…"
+              className="h-11 rounded-full border-border bg-card pl-10 pr-10 w-full"
+            />
+          </div>
           {query && (
             <button
               onClick={() => setQuery("")}
               aria-label="Clear search"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground z-10"
             >
               <X className="h-4 w-4" />
             </button>
           )}
+          <p className="t-error-msg absolute left-4 mt-1 text-[11px] text-destructive">
+            No matching repositories found.
+          </p>
         </div>
-        <div className="flex gap-1 rounded-full border border-border bg-card p-1 text-xs font-medium">
+        <div ref={sortContainerRef} className="t-tabs text-xs font-medium relative self-start sm:self-auto">
+          <span className="t-tabs-pill" style={pillStyle} aria-hidden="true" />
           {(["stars", "name"] as const).map((s) => (
             <button
               key={s}
               onClick={() => setSort(s)}
-              className={`rounded-full px-3 py-1.5 transition-colors ${sort === s ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              aria-selected={sort === s}
+              className="t-tab"
             >
               Sort: {s}
             </button>
@@ -479,6 +539,28 @@ function About() {
 }
 
 function Contact() {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+
+  const getStyle = (i: number) => {
+    const lift = -6;
+    const falloff = 0.45;
+    const scale = 1.1;
+    const distance = activeIdx !== null ? Math.abs(i - activeIdx) : 0;
+    const shift = activeIdx !== null ? lift * Math.pow(falloff, distance) : 0;
+    const scaleActive = activeIdx === i ? scale : 1;
+    return {
+      "--shift": `${shift}px`,
+      "--scale-active": scaleActive,
+      transitionTimingFunction: activeIdx !== null ? "var(--avatar-ease-in)" : "var(--avatar-ease-out)",
+    } as React.CSSProperties;
+  };
+
+  const links = [
+    { href: "https://github.com", label: "GitHub", icon: <Github className="h-4 w-4" /> },
+    { href: "https://linkedin.com", label: "LinkedIn", icon: <Linkedin className="h-4 w-4" /> },
+    { href: "mailto:hello@therdm.dev", label: "Email", icon: <Mail className="h-4 w-4" /> },
+  ];
+
   return (
     <section id="contact" className="mx-auto max-w-3xl px-6 py-28 text-center">
       <SectionLabel eyebrow="Contact" title="Let's build together." center />
@@ -493,10 +575,20 @@ function Contact() {
           Let's build together
           <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </a>
-        <div className="flex items-center gap-2">
-          <IconLink href="https://github.com" label="GitHub"><Github className="h-4 w-4" /></IconLink>
-          <IconLink href="https://linkedin.com" label="LinkedIn"><Linkedin className="h-4 w-4" /></IconLink>
-          <IconLink href="mailto:hello@therdm.dev" label="Email"><Mail className="h-4 w-4" /></IconLink>
+        <div className="flex items-center gap-2 t-avatar-group">
+          {links.map((link, i) => (
+            <div
+              key={link.label}
+              onMouseEnter={() => setActiveIdx(i)}
+              onMouseLeave={() => setActiveIdx(null)}
+              style={getStyle(i)}
+              className="t-avatar"
+            >
+              <IconLink href={link.href} label={link.label}>
+                {link.icon}
+              </IconLink>
+            </div>
+          ))}
         </div>
       </div>
     </section>
