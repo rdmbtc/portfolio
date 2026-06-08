@@ -590,8 +590,8 @@ function FeaturedShowcase({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r:
             className="group flex h-[70vh] w-[78vw] shrink-0 cursor-pointer flex-col overflow-hidden rounded-3xl border border-border bg-card transition-colors hover:border-foreground/30 sm:w-[55vw] lg:w-[42vw]"
             onClick={() => onOpen(r)}
           >
-            <div className="relative flex-1 overflow-hidden bg-gradient-to-br from-secondary via-muted to-secondary">
-              <BrowserMock title={r.name} />
+            <div className="relative flex-1 overflow-hidden bg-gradient-to-br from-secondary via-muted to-secondary bg-background bg-gradient-to-br">
+              <ProjectMockups title={r.name} screenshots={r.screenshots} />
             </div>
             <div className="flex items-end justify-between gap-4 border-t border-border p-6">
               <div className="min-w-0">
@@ -630,24 +630,85 @@ function FeaturedShowcase({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r:
   );
 }
 
-function BrowserMock({ title }: { title: string }) {
+function ProjectMockups({ title, screenshots }: { title: string; screenshots?: string[] }) {
+  const hasScreenshots = screenshots && screenshots.length > 0;
+  
+  if (!hasScreenshots) {
+    return (
+      <div className="absolute inset-6 rounded-xl border border-border bg-background shadow-sm overflow-hidden flex flex-col">
+        <div className="flex h-7 shrink-0 items-center gap-1.5 border-b border-border px-3 bg-muted/20">
+          <span className="h-2 w-2 rounded-full bg-red-400/60" />
+          <span className="h-2 w-2 rounded-full bg-yellow-400/60" />
+          <span className="h-2 w-2 rounded-full bg-emerald-400/60" />
+          <span className="ml-3 truncate font-mono text-[11px] sm:text-xs text-muted-foreground">{title.toLowerCase().replace(/\s/g, "-")}.app</span>
+        </div>
+        <div className="flex-1 space-y-3 p-5 bg-secondary/5">
+          <div className="h-2 w-1/3 rounded bg-muted" />
+          <div className="h-2 w-2/3 rounded bg-muted" />
+          <div className="mt-4 grid grid-cols-3 gap-3">
+            <div className="h-14 rounded-lg bg-secondary" />
+            <div className="h-14 rounded-lg bg-secondary" />
+            <div className="h-14 rounded-lg bg-secondary" />
+          </div>
+          <div className="mt-2 h-24 rounded-lg bg-gradient-to-br from-secondary to-muted" />
+        </div>
+      </div>
+    );
+  }
+
+  const hasMultiple = screenshots.length > 1;
+
+  if (hasMultiple) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center p-6 select-none overflow-hidden">
+        {/* Browser Mockup (aligned left/center and slightly scaled down/shifted) */}
+        <div className="absolute left-6 right-20 top-6 bottom-16 rounded-xl border border-border bg-background shadow-md overflow-hidden flex flex-col transition-all duration-500 group-hover:scale-[1.01]">
+          <div className="flex h-6 shrink-0 items-center gap-1 border-b border-border px-2.5 bg-muted/20">
+            <span className="h-1.5 w-1.5 rounded-full bg-red-400/60" />
+            <span className="h-1.5 w-1.5 rounded-full bg-yellow-400/60" />
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/60" />
+            <span className="ml-2 truncate font-mono text-[9px] text-muted-foreground">{title.toLowerCase().replace(/\s/g, "-")}.app</span>
+          </div>
+          <div className="flex-1 relative bg-secondary/5 overflow-hidden">
+            <img
+              src={screenshots[0]}
+              alt={title}
+              className="absolute inset-0 w-full h-full object-cover object-top"
+            />
+          </div>
+        </div>
+
+        {/* Mobile Mockup (aligned bottom right, overlapping) */}
+        <div className="absolute right-6 bottom-6 w-24 sm:w-28 h-[160px] sm:h-[200px] rounded-[1.5rem] border-[4px] border-foreground bg-background shadow-bob-lg overflow-hidden transition-transform duration-500 group-hover:scale-[1.03] group-hover:translate-x-1 group-hover:-translate-y-1">
+          {/* Mini Notch */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-2 border-b-2 border-x-2 border-foreground bg-background rounded-b-md z-20" />
+          <div className="relative w-full h-full bg-background overflow-hidden">
+            <img
+              src={screenshots[1]}
+              alt={`${title} mobile`}
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Single screenshot layout (centered browser mockup)
   return (
-    <div className="absolute inset-6 rounded-xl border border-border bg-background shadow-sm">
-      <div className="flex h-7 items-center gap-1.5 border-b border-border px-3">
+    <div className="absolute inset-6 rounded-xl border border-border bg-background shadow-sm overflow-hidden flex flex-col">
+      <div className="flex h-7 shrink-0 items-center gap-1.5 border-b border-border px-3 bg-muted/20">
         <span className="h-2 w-2 rounded-full bg-red-400/60" />
         <span className="h-2 w-2 rounded-full bg-yellow-400/60" />
         <span className="h-2 w-2 rounded-full bg-emerald-400/60" />
         <span className="ml-3 truncate font-mono text-[11px] sm:text-xs text-muted-foreground">{title.toLowerCase().replace(/\s/g, "-")}.app</span>
       </div>
-      <div className="space-y-3 p-5">
-        <div className="h-2 w-1/3 rounded bg-muted" />
-        <div className="h-2 w-2/3 rounded bg-muted" />
-        <div className="mt-4 grid grid-cols-3 gap-3">
-          <div className="h-14 rounded-lg bg-secondary" />
-          <div className="h-14 rounded-lg bg-secondary" />
-          <div className="h-14 rounded-lg bg-secondary" />
-        </div>
-        <div className="mt-2 h-24 rounded-lg bg-gradient-to-br from-secondary to-muted" />
+      <div className="flex-1 relative bg-secondary/5 overflow-hidden">
+        <img
+          src={screenshots[0]}
+          alt={title}
+          className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+        />
       </div>
     </div>
   );
