@@ -63,6 +63,9 @@ const navSections = [
   { id: "contact", label: "Contact" },
 ];
 
+const heroFramePath = (i: number) => `/frames/frame_${String(i).padStart(4, "0")}.jpg`;
+const outroFramePath = (i: number) => `/frames2/frame_${String(i).padStart(4, "0")}.jpg`;
+
 function Index() {
   const [activeRepo, setActiveRepo] = useState<Repo | null>(null);
   const meta = useRepoMeta();
@@ -124,7 +127,7 @@ function Index() {
       {/* Scroll-scrubbed canvas sequence for 2.mp4 at the end of the website */}
       <ScrollSequence
         frameCount={240}
-        framePath={(i) => `/frames2/frame_${String(i).padStart(4, "0")}.jpg`}
+        framePath={outroFramePath}
       >
         <div className="absolute inset-x-0 bottom-10 flex justify-center">
           <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur-md">
@@ -271,7 +274,7 @@ function Hero() {
       {/* Scroll-scrubbed canvas sequence */}
       <ScrollSequence
         frameCount={240}
-        framePath={(i) => `/frames/frame_${String(i).padStart(4, "0")}.jpg`}
+        framePath={heroFramePath}
         canvasClassName="filter blur-[8px] scale-105 brightness-[1.1] opacity-75 dark:brightness-[0.35] dark:opacity-100 transition-all duration-300"
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
