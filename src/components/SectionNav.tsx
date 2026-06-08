@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export interface NavSection { id: string; label: string }
 
@@ -13,8 +14,17 @@ export default function SectionNav({ sections }: { sections: NavSection[] }) {
     if (!sections.some((s) => s.id === hash)) return;
     // Defer so the layout (and pinned ScrollTriggers) is ready.
     const t = window.setTimeout(() => {
-      document.getElementById(hash)?.scrollIntoView({ behavior: "auto", block: "start" });
-    }, 100);
+      const el = document.getElementById(hash);
+      if (el) {
+        if ((window as any).lenis) {
+          const trigger = ScrollTrigger.getAll().find((st) => st.trigger === el);
+          const target = trigger ? trigger.start : el;
+          (window as any).lenis.scrollTo(target, { immediate: true });
+        } else {
+          el.scrollIntoView({ behavior: "auto", block: "start" });
+        }
+      }
+    }, 200);
     return () => window.clearTimeout(t);
   }, [sections]);
 
@@ -49,7 +59,16 @@ export default function SectionNav({ sections }: { sections: NavSection[] }) {
   }, [sections]);
 
   const jump = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const el = document.getElementById(id);
+    if (el) {
+      if (typeof window !== "undefined" && (window as any).lenis) {
+        const trigger = ScrollTrigger.getAll().find((st) => st.trigger === el);
+        const target = trigger ? trigger.start : el;
+        (window as any).lenis.scrollTo(target, { duration: 1.2 });
+      } else {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
     if (typeof window !== "undefined") {
       window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#${id}`);
     }

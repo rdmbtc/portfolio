@@ -11,6 +11,9 @@ import { Input } from "@/components/ui/input";
 import { repos, allTags, type Repo } from "@/data/projects";
 import PerfHud from "@/components/PerfHud";
 import { useRepoMeta } from "@/hooks/useRepoMeta";
+import Lenis from "lenis";
+import Magnetic from "@/components/Magnetic";
+import SplitTextReveal from "@/components/SplitTextReveal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -69,6 +72,32 @@ const outroFramePath = (i: number) => `/frames2/frame_${String(i).padStart(4, "0
 function Index() {
   const [activeRepo, setActiveRepo] = useState<Repo | null>(null);
   const meta = useRepoMeta();
+
+  // Initialize Lenis smooth scroll on client mount
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+    });
+
+    (window as any).lenis = lenis;
+
+    lenis.on("scroll", ScrollTrigger.update);
+
+    const raf = (time: number) => {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+      delete (window as any).lenis;
+    };
+  }, []);
 
   // Refresh ScrollTrigger positions when page finishes loading
   useEffect(() => {
@@ -173,7 +202,11 @@ function Nav() {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     if (id === "top") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if ((window as any).lenis) {
+        (window as any).lenis.scrollTo(0, { duration: 1.5 });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
       if (typeof window !== "undefined") {
         window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
       }
@@ -183,13 +216,18 @@ function Nav() {
     const element = document.getElementById(id);
     if (element) {
       const trigger = ScrollTrigger.getAll().find((st) => st.trigger === element);
-      if (trigger) {
-        window.scrollTo({
-          top: trigger.start,
-          behavior: "smooth",
-        });
+      const target = trigger ? trigger.start : element;
+      if ((window as any).lenis) {
+        (window as any).lenis.scrollTo(target, { duration: 1.5 });
       } else {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (trigger) {
+          window.scrollTo({
+            top: trigger.start,
+            behavior: "smooth",
+          });
+        } else {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       }
       if (typeof window !== "undefined") {
         window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#${id}`);
@@ -203,14 +241,16 @@ function Nav() {
         className="pointer-events-auto flex items-center justify-between rounded-full border shadow-2xl bg-background/95 text-foreground border-border/80 backdrop-blur-xl px-4 py-2 sm:px-6 sm:py-3 w-full max-w-[480px] sm:max-w-xl md:max-w-2xl h-12 sm:h-14 md:h-16"
       >
         {/* Logo - always visible */}
-        <a
-          href="#top"
-          onClick={(e) => handleNavClick(e, "top")}
-          className="text-xs sm:text-sm md:text-base font-bold tracking-tight shrink-0 flex items-center gap-1.5 sm:gap-2 pl-1 sm:pl-2 hover:opacity-85 transition-opacity"
-        >
-          <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)] animate-pulse" />
-          <span>RDM</span>
-        </a>
+        <Magnetic>
+          <a
+            href="#top"
+            onClick={(e) => handleNavClick(e, "top")}
+            className="text-xs sm:text-sm md:text-base font-bold tracking-tight shrink-0 flex items-center gap-1.5 sm:gap-2 pl-1 sm:pl-2 hover:opacity-85 transition-opacity"
+          >
+            <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)] animate-pulse" />
+            <span>RDM</span>
+          </a>
+        </Magnetic>
 
         {/* Full Menu Content - always shown */}
         <nav className="flex gap-3 sm:gap-5 md:gap-6 text-xs sm:text-sm md:text-[15px] font-semibold text-muted-foreground/90">
@@ -222,27 +262,31 @@ function Nav() {
 
         {/* Actions - always shown */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          <button
-            onClick={toggleTheme}
-            className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:border-foreground/30 hover:text-foreground cursor-pointer transition-colors"
-            aria-label="Toggle theme"
-          >
-            <div className="t-icon-swap" data-state={theme === "light" ? "a" : "b"}>
-              <span className="t-icon" data-icon="a">
-                <Moon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
-              </span>
-              <span className="t-icon" data-icon="b">
-                <Sun className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
-              </span>
-            </div>
-          </button>
-          <a
-            href="#contact"
-            onClick={(e) => handleNavClick(e, "contact")}
-            className="rounded-full bg-primary text-primary-foreground px-4.5 py-2 text-xs sm:text-sm font-bold hover:opacity-90 transition-opacity"
-          >
-            Contact
-          </a>
+          <Magnetic>
+            <button
+              onClick={toggleTheme}
+              className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:border-foreground/30 hover:text-foreground cursor-pointer transition-colors"
+              aria-label="Toggle theme"
+            >
+              <div className="t-icon-swap" data-state={theme === "light" ? "a" : "b"}>
+                <span className="t-icon" data-icon="a">
+                  <Moon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
+                </span>
+                <span className="t-icon" data-icon="b">
+                  <Sun className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
+                </span>
+              </div>
+            </button>
+          </Magnetic>
+          <Magnetic>
+            <a
+              href="#contact"
+              onClick={(e) => handleNavClick(e, "contact")}
+              className="rounded-full bg-primary text-primary-foreground px-4.5 py-2 text-xs sm:text-sm font-bold hover:opacity-90 transition-opacity"
+            >
+              Contact
+            </a>
+          </Magnetic>
         </div>
       </div>
     </header>
@@ -254,6 +298,7 @@ const phrases = ["with care.", "with speed.", "with precision.", "with purpose."
 function Hero() {
   const [isShown, setIsShown] = useState(false);
   const [phraseIdx, setPhraseIdx] = useState(0);
+  const trailCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     setIsShown(true);
@@ -263,13 +308,111 @@ function Hero() {
     return () => clearInterval(interval);
   }, []);
 
+  // Hero interactive gradient particle cursor trail
+  useEffect(() => {
+    const canvas = trailCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = canvas.offsetWidth);
+    let height = (canvas.height = canvas.offsetHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = canvas.offsetWidth;
+      height = canvas.height = canvas.offsetHeight;
+    };
+    window.addEventListener("resize", handleResize);
+
+    const points: { x: number; y: number; age: number }[] = [];
+    let mouse = { x: 0, y: 0, active: false };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
+      
+      points.push({ x: mouse.x, y: mouse.y, age: 0 });
+      if (points.length > 25) points.shift();
+    };
+
+    const handleMouseLeave = () => {
+      mouse.active = false;
+    };
+
+    const container = canvas.parentElement;
+    if (container) {
+      container.addEventListener("mousemove", handleMouseMove);
+      container.addEventListener("mouseleave", handleMouseLeave);
+    }
+
+    const tick = () => {
+      ctx.clearRect(0, 0, width, height);
+      
+      if (points.length > 1) {
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+          const xc = (points[i].x + points[i - 1].x) / 2;
+          const yc = (points[i].y + points[i - 1].y) / 2;
+          ctx.quadraticCurveTo(points[i - 1].x, points[i - 1].y, xc, yc);
+        }
+        
+        const grad = ctx.createLinearGradient(
+          points[0].x, points[0].y, 
+          points[points.length - 1].x, points[points.length - 1].y
+        );
+        grad.addColorStop(0, "rgba(99, 102, 241, 0)");
+        grad.addColorStop(0.5, "rgba(168, 85, 247, 0.3)");
+        grad.addColorStop(1, "rgba(236, 72, 153, 0.75)");
+        
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 4;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.stroke();
+
+        for (let i = 0; i < points.length; i++) {
+          const p = points[i];
+          p.age += 1;
+          const radius = (i / points.length) * 3;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(236, 72, 153, ${i / points.length})`;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = "rgba(236, 72, 153, 0.5)";
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(tick);
+    };
+
+    tick();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (container) {
+        container.removeEventListener("mousemove", handleMouseMove);
+        container.removeEventListener("mouseleave", handleMouseLeave);
+      }
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
   return (
-    <section id="top" className="relative">
+    <section id="top" className="relative overflow-hidden">
       {/* Ambient background glows */}
       <div className="pointer-events-none absolute inset-x-0 -top-40 -z-10 flex justify-center">
         <div className="h-[350px] w-[600px] rounded-full bg-indigo-500/10 blur-[120px] dark:bg-indigo-500/5" />
         <div className="h-[250px] w-[400px] rounded-full bg-pink-500/10 blur-[100px] dark:bg-pink-500/5 -ml-20" />
       </div>
+
+      <canvas ref={trailCanvasRef} className="pointer-events-none absolute inset-0 h-full w-full z-10 opacity-60 dark:opacity-45" />
 
       {/* Scroll-scrubbed canvas sequence */}
       <ScrollSequence
@@ -277,7 +420,7 @@ function Hero() {
         framePath={heroFramePath}
         canvasClassName="filter blur-[10px] scale-105 brightness-[1.15] opacity-65 dark:brightness-[0.25] dark:opacity-100 transition-all duration-300"
       >
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none z-20">
           <div className={`max-w-4xl pointer-events-auto t-stagger ${isShown ? "is-shown" : ""}`}>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1 text-xs text-muted-foreground backdrop-blur-md t-stagger-line t-stagger-line--1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -318,7 +461,7 @@ function Hero() {
 function Skills() {
   return (
     <section id="stack" className="mx-auto max-w-6xl px-6 py-28">
-      <SectionLabel eyebrow="Stack" title="A precise, modern toolkit." />
+      <SplitTextReveal eyebrow="Stack" text="A precise, modern toolkit." />
       <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {stack.map((s, i) => (
           <div
@@ -396,7 +539,7 @@ function ProjectStories({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: R
   return (
     <section id="stories" className="relative">
       <div className="mx-auto max-w-6xl px-6 pb-12 pt-28 text-center">
-        <SectionLabel eyebrow="Stories" title="Per-project scroll-scrub stories." center />
+        <SplitTextReveal eyebrow="Stories" text="Per-project scroll-scrub stories." center />
         <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">
           Each featured build gets its own pinned section. Keep scrolling — the frames slide horizontally as the story unfolds.
         </p>
@@ -412,7 +555,7 @@ function FeaturedShowcase({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r:
   return (
     <>
       <div id="work" className="mx-auto max-w-6xl px-6 pb-2 pt-28">
-        <SectionLabel eyebrow="Featured" title="Selected work, side by side." />
+        <SplitTextReveal eyebrow="Featured" text="Selected work, side by side." />
         <p className="mt-4 max-w-xl text-sm text-muted-foreground">
           Scroll → to drift through featured builds. Each one ships live and lives in the open on GitHub.
         </p>
@@ -548,7 +691,7 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
   return (
     <section id="repos" className="mx-auto max-w-6xl px-6 py-28">
       <div className="flex items-end justify-between gap-6">
-        <SectionLabel eyebrow={`All · ${items.length}`} title="Everything in the open." />
+        <SplitTextReveal eyebrow={`All · ${items.length}`} text="Everything in the open." />
         <a href="https://github.com/rdmbtc?tab=repositories" target="_blank" rel="noreferrer"
            className="hidden items-center gap-2 text-sm text-muted-foreground hover:text-foreground sm:inline-flex">
           github.com/rdmbtc <ArrowUpRight className="h-4 w-4" />
@@ -681,7 +824,7 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
 function About() {
   return (
     <section id="about" className="mx-auto max-w-3xl px-6 py-28">
-      <SectionLabel eyebrow="About" title="About Me" />
+      <SplitTextReveal eyebrow="About" text="About Me" />
       <p className="mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground">
         I’m Dr RDM, a passionate Web3 developer specializing in smart contracts, React, and decentralized applications (dApps). I thrive on building and testing projects in testnets, exploring the cutting edge of blockchain technology. With 2k followers on YouTube (
         <a 
@@ -733,18 +876,20 @@ function Contact() {
 
   return (
     <section id="contact" className="mx-auto max-w-3xl px-6 py-28 text-center">
-      <SectionLabel eyebrow="Contact" title="Let's build together." center />
+      <SplitTextReveal eyebrow="Contact" text="Let's build together." center />
       <p className="mx-auto mt-6 max-w-md text-muted-foreground">
         Got a project in mind, or just want to chat? I reply to every message.
       </p>
       <div className="mt-10 flex flex-col items-center gap-6">
-        <a
-          href="mailto:hello@therdm.dev"
-          className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:scale-[1.02] hover:shadow-[0_10px_30px_-10px_oklch(0.15_0.005_260_/_0.4)]"
-        >
-          Let's build together
-          <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        </a>
+        <Magnetic radius={60} strength={0.4}>
+          <a
+            href="mailto:hello@therdm.dev"
+            className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:scale-[1.02] hover:shadow-[0_10px_30px_-10px_oklch(0.15_0.005_260_/_0.4)]"
+          >
+            Let's build together
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </a>
+        </Magnetic>
         <div className="flex items-center gap-2 t-avatar-group">
           {links.map((link, i) => (
             <div
@@ -774,14 +919,5 @@ function IconLink({ href, label, children }: { href: string; label: string; chil
     >
       {children}
     </a>
-  );
-}
-
-function SectionLabel({ eyebrow, title, center }: { eyebrow: string; title: string; center?: boolean }) {
-  return (
-    <div className={center ? "text-center" : ""}>
-      <p className="font-mono text-xs sm:text-sm font-semibold uppercase tracking-widest text-muted-foreground">{eyebrow}</p>
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
-    </div>
   );
 }
