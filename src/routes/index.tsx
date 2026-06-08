@@ -205,6 +205,7 @@ function Hero() {
       <ScrollSequence
         frameCount={240}
         framePath={(i) => `/frames/frame_${String(i).padStart(4, "0")}.jpg`}
+        canvasClassName="filter blur-[8px] scale-105 brightness-[1.1] opacity-75 dark:brightness-[0.35] dark:opacity-100 transition-all duration-300"
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
           <div className={`max-w-4xl pointer-events-auto t-stagger ${isShown ? "is-shown" : ""}`}>

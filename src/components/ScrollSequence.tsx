@@ -9,9 +9,10 @@ interface Props {
   frameCount: number;
   framePath: (i: number) => string;
   children?: React.ReactNode;
+  canvasClassName?: string;
 }
 
-export default function ScrollSequence({ frameCount, framePath, children }: Props) {
+export default function ScrollSequence({ frameCount, framePath, children, canvasClassName }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -139,7 +140,7 @@ export default function ScrollSequence({ frameCount, framePath, children }: Prop
 
   return (
     <section ref={containerRef} className="relative h-screen w-full overflow-hidden">
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      <canvas ref={canvasRef} className={`absolute inset-0 h-full w-full ${canvasClassName || ""}`} />
       <div className="pointer-events-none absolute inset-0">{children}</div>
     </section>
   );
