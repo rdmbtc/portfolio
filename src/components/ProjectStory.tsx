@@ -84,8 +84,8 @@ export default function ProjectStory({ repo, index, onOpen }: Props) {
             className="relative flex h-full w-1/3 shrink-0 items-center justify-center px-6"
           >
             <div data-story-content className="mx-auto w-full max-w-3xl">
-              <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                <span className="rounded-full border border-border bg-secondary/50 px-2 py-0.5">
+              <div className="flex items-center gap-3 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground font-semibold">
+                <span className="rounded-full border border-border bg-secondary/50 px-2.5 py-0.5">
                   {String(index + 1).padStart(2, "0")} / {repo.name.toLowerCase().replace(/\s/g, "-")}
                 </span>
                 <span>{s.label}</span>

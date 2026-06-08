@@ -130,7 +130,7 @@ function Index() {
         framePath={outroFramePath}
       >
         <div className="absolute inset-x-0 bottom-10 flex justify-center">
-          <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur-md">
+          <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground backdrop-blur-md">
             scroll-driven · 240 frames · canvas (outro)
           </p>
         </div>
@@ -239,7 +239,7 @@ function Nav() {
           <a
             href="#contact"
             onClick={(e) => handleNavClick(e, "contact")}
-            className="rounded-full bg-primary text-primary-foreground px-3.5 py-1.5 sm:px-4.5 sm:py-2 text-[10px] sm:text-xs md:text-sm font-bold hover:opacity-90 transition-opacity"
+            className="rounded-full bg-primary text-primary-foreground px-4.5 py-2 text-xs sm:text-sm font-bold hover:opacity-90 transition-opacity"
           >
             Contact
           </a>
@@ -275,7 +275,7 @@ function Hero() {
       <ScrollSequence
         frameCount={240}
         framePath={heroFramePath}
-        canvasClassName="filter blur-[8px] scale-105 brightness-[1.1] opacity-75 dark:brightness-[0.35] dark:opacity-100 transition-all duration-300"
+        canvasClassName="filter blur-[10px] scale-105 brightness-[1.15] opacity-65 dark:brightness-[0.25] dark:opacity-100 transition-all duration-300"
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
           <div className={`max-w-4xl pointer-events-auto t-stagger ${isShown ? "is-shown" : ""}`}>
@@ -296,16 +296,16 @@ function Hero() {
             <p className="mx-auto mt-6 max-w-2xl text-balance text-sm sm:text-base md:text-lg text-muted-foreground t-stagger-line t-stagger-line--3 leading-relaxed">
               I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.
             </p>
-            <p className="mt-4 text-sm text-muted-foreground t-stagger-line t-stagger-line--4">
-              <span className="typing font-mono text-xs sm:text-sm">therdm.dev</span>
+            <p className="mt-4 text-sm sm:text-base text-muted-foreground t-stagger-line t-stagger-line--4">
+              <span className="typing font-mono text-sm sm:text-base">therdm.dev</span>
             </p>
           </div>
 
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
-            <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[9px] uppercase tracking-widest text-muted-foreground backdrop-blur-md">
+            <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground backdrop-blur-md">
               scroll-driven · 240 frames · canvas
             </p>
-            <p className="animate-bounce font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">
+            <p className="animate-bounce font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground/60">
               ↓ scroll
             </p>
           </div>
@@ -355,7 +355,7 @@ function Stats() {
                 ))}
               </span>
             </div>
-            <div className="mt-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{s.label}</div>
+            <div className="mt-2 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground font-semibold">{s.label}</div>
           </div>
         ))}
       </div>
@@ -416,9 +416,9 @@ function FeaturedShowcase({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r:
             </div>
             <div className="flex items-end justify-between gap-4 border-t border-border p-6">
               <div className="min-w-0">
-                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground">
                   <LangDot lang={r.language} /> {r.language ?? "—"}
-                  {r.stars > 0 && <span className="inline-flex items-center gap-1"><Star className="h-3 w-3" /> {r.stars}</span>}
+                  {r.stars > 0 && <span className="inline-flex items-center gap-1.5"><Star className="h-3.5 w-3.5" /> {r.stars}</span>}
                 </div>
                 <h3 className="mt-2 truncate text-xl font-semibold tracking-tight">{r.name}</h3>
                 <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{r.description}</p>
@@ -458,7 +458,7 @@ function BrowserMock({ title }: { title: string }) {
         <span className="h-2 w-2 rounded-full bg-red-400/60" />
         <span className="h-2 w-2 rounded-full bg-yellow-400/60" />
         <span className="h-2 w-2 rounded-full bg-emerald-400/60" />
-        <span className="ml-3 truncate font-mono text-[10px] text-muted-foreground">{title.toLowerCase().replace(/\s/g, "-")}.app</span>
+        <span className="ml-3 truncate font-mono text-[11px] sm:text-xs text-muted-foreground">{title.toLowerCase().replace(/\s/g, "-")}.app</span>
       </div>
       <div className="space-y-3 p-5">
         <div className="h-2 w-1/3 rounded bg-muted" />
@@ -608,7 +608,7 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
         ))}
       </div>
 
-      <p className="mt-4 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+      <p className="mt-4 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground font-semibold">
         {filtered.length} of {repos.length} shown
       </p>
 
@@ -629,15 +629,15 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
             {r.tags.length > 0 && (
               <div className="mt-1 flex flex-wrap gap-1">
                 {r.tags.slice(0, 3).map((tag) => (
-                  <span key={tag} className="rounded-full border border-border/60 bg-secondary/40 px-2 py-0.5 text-[10px] text-muted-foreground">
+                  <span key={tag} className="rounded-full border border-border/60 bg-secondary/40 px-2.5 py-0.5 text-[11px] sm:text-xs text-muted-foreground font-medium">
                     {tag}
                   </span>
                 ))}
               </div>
             )}
-            <div className="mt-auto flex items-center gap-3 pt-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            <div className="mt-auto flex items-center gap-3 pt-2 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground font-semibold">
               <span className="inline-flex items-center gap-1.5"><LangDot lang={r.language} /> {r.language ?? "—"}</span>
-              {r.stars > 0 && <span className="inline-flex items-center gap-1"><Star className="h-3 w-3" /> {r.stars}</span>}
+              {r.stars > 0 && <span className="inline-flex items-center gap-1.5"><Star className="h-3.5 w-3.5" /> {r.stars}</span>}
               {r.homepage && <span className="ml-auto inline-flex items-center gap-1 text-emerald-600/80">● live</span>}
             </div>
           </button>
@@ -660,7 +660,7 @@ function About() {
         {timeline.map((t) => (
           <div key={t.year} className="relative">
             <span className="absolute -left-[33px] top-1.5 h-2 w-2 rounded-full bg-foreground ring-4 ring-background" />
-            <div className="font-mono text-xs text-muted-foreground">{t.year}</div>
+            <div className="font-mono text-xs sm:text-sm font-bold text-muted-foreground">{t.year}</div>
             <h3 className="mt-1 font-semibold tracking-tight">{t.title}</h3>
             <p className="mt-1 text-sm text-muted-foreground">{t.body}</p>
           </div>
@@ -742,7 +742,7 @@ function IconLink({ href, label, children }: { href: string; label: string; chil
 function SectionLabel({ eyebrow, title, center }: { eyebrow: string; title: string; center?: boolean }) {
   return (
     <div className={center ? "text-center" : ""}>
-      <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">{eyebrow}</p>
+      <p className="font-mono text-xs sm:text-sm font-semibold uppercase tracking-widest text-muted-foreground">{eyebrow}</p>
       <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
     </div>
   );
