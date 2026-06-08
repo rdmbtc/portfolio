@@ -421,27 +421,44 @@ function Hero() {
         canvasClassName="filter blur-[10px] scale-105 brightness-[1.02] opacity-55 dark:brightness-[0.25] dark:opacity-100 transition-all duration-300"
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none z-20">
-          <div className={`w-full max-w-4xl pointer-events-auto t-stagger ${isShown ? "is-shown" : ""} p-8 sm:p-12 md:p-14 rounded-[32px] border border-border/60 bg-background/55 dark:bg-background/25 backdrop-blur-2xl shadow-[0_24px_60px_-15px_oklch(0.15_0.005_260_/_0.05)] dark:shadow-[0_24px_60px_-15px_rgba(0,0,0,0.45)]`}>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1 text-xs text-foreground/80 dark:text-muted-foreground backdrop-blur-md t-stagger-line t-stagger-line--1">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              Available for new work · Q3 2026
+          <div className={`w-[90%] max-w-6xl pointer-events-auto t-stagger ${isShown ? "is-shown" : ""} p-8 sm:p-12 md:p-14 rounded-[32px] border border-border/60 bg-background/55 dark:bg-background/25 backdrop-blur-2xl shadow-[0_24px_60px_-15px_oklch(0.15_0.005_260_/_0.05)] dark:shadow-[0_24px_60px_-15px_rgba(0,0,0,0.45)]`}>
+            <div className="flex flex-col-reverse md:flex-row items-center gap-8 md:gap-12 w-full">
+              {/* Left Column: Text Content */}
+              <div className="flex-1 min-w-0 w-full text-left">
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1 text-xs text-foreground/80 dark:text-muted-foreground backdrop-blur-md t-stagger-line t-stagger-line--1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Available for new work · Q3 2026
+                </div>
+                <h1 className="text-balance text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight t-stagger-line t-stagger-line--2 leading-[1.15] text-foreground">
+                  Clean, modern web products,<br />
+                  <span>shipped </span>
+                  <span
+                    key={phraseIdx}
+                    className="inline-block bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-text-swap"
+                  >
+                    {phrases[phraseIdx]}
+                  </span>
+                </h1>
+                <p className="mt-6 max-w-2xl text-balance text-sm sm:text-base md:text-lg text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--3 leading-relaxed">
+                  I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.
+                </p>
+                <p className="mt-4 text-sm sm:text-base text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--4">
+                  <span className="typing font-mono text-sm sm:text-base">therdm.dev</span>
+                </p>
+              </div>
+
+              {/* Right Column: GitHub PFP with animated gradient glow */}
+              <div className="shrink-0 flex justify-center w-full md:w-auto">
+                <div className="relative group">
+                  <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-40 blur-xl transition duration-1000 group-hover:opacity-75 group-hover:duration-200" />
+                  <img
+                    src="https://avatars.githubusercontent.com/u/114354595?v=4"
+                    alt="Dr RDM Github Profile"
+                    className="relative h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 rounded-full border-2 border-border/80 object-cover shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]"
+                  />
+                </div>
+              </div>
             </div>
-            <h1 className="text-balance text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight t-stagger-line t-stagger-line--2 leading-[1.15] text-foreground">
-              Clean, modern web products,<br />
-              <span>shipped </span>
-              <span
-                key={phraseIdx}
-                className="inline-block bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-text-swap"
-              >
-                {phrases[phraseIdx]}
-              </span>
-            </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-balance text-sm sm:text-base md:text-lg text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--3 leading-relaxed">
-              I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.
-            </p>
-            <p className="mt-4 text-sm sm:text-base text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--4">
-              <span className="typing font-mono text-sm sm:text-base">therdm.dev</span>
-            </p>
           </div>
 
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
