@@ -18,14 +18,7 @@ export default function SectionNav({ sections }: { sections: NavSection[] }) {
     return () => window.clearTimeout(t);
   }, [sections]);
 
-  // Keep URL hash in sync with the active section (shareable / refreshable).
-  useEffect(() => {
-    if (!active || typeof window === "undefined") return;
-    const current = window.location.hash.replace("#", "");
-    if (current === active) return;
-    const url = `${window.location.pathname}${window.location.search}#${active}`;
-    window.history.replaceState(null, "", url);
-  }, [active]);
+
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
