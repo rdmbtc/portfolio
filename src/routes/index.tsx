@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect, useRef } from "react";
-import { Github, Mail, Linkedin, Check, ArrowUpRight, Star, ExternalLink, Search, X } from "lucide-react";
+import { Github, Mail, Linkedin, Check, ArrowUpRight, Star, ExternalLink, Search, X, Sun, Moon } from "lucide-react";
 import ScrollSequence from "@/components/ScrollSequence";
 import HorizontalScroll from "@/components/HorizontalScroll";
 import SectionNav from "@/components/SectionNav";
@@ -118,6 +118,31 @@ function Index() {
 }
 
 function Nav() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("theme") as "light" | "dark" | null;
+    const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const initialTheme = saved || (systemDark ? "dark" : "light");
+    setTheme(initialTheme);
+    if (initialTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "light" ? "dark" : "light";
+    setTheme(nextTheme);
+    localStorage.setItem("theme", nextTheme);
+    if (nextTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/75 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
@@ -133,12 +158,28 @@ function Nav() {
           <a href="#about" className="hover:text-foreground transition-colors">About</a>
           <a href="#contact" className="hover:text-foreground transition-colors">Contact</a>
         </nav>
-        <a href="#contact" className="rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90 transition-opacity relative">
-          Get in touch
-          <span className="t-badge" data-open="true">
-            <span className="t-badge-dot h-1.5 w-1.5 rounded-full bg-emerald-400 border border-background" />
-          </span>
-        </a>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={toggleTheme}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:border-foreground/30 hover:text-foreground cursor-pointer transition-colors"
+            aria-label="Toggle theme"
+          >
+            <div className="t-icon-swap" data-state={theme === "light" ? "a" : "b"}>
+              <span className="t-icon" data-icon="a">
+                <Moon className="h-4.5 w-4.5" />
+              </span>
+              <span className="t-icon" data-icon="b">
+                <Sun className="h-4.5 w-4.5" />
+              </span>
+            </div>
+          </button>
+          <a href="#contact" className="rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90 transition-opacity relative">
+            Get in touch
+            <span className="t-badge" data-open="true">
+              <span className="t-badge-dot h-1.5 w-1.5 rounded-full bg-emerald-400 border border-background" />
+            </span>
+          </a>
+        </div>
       </div>
     </header>
   );
