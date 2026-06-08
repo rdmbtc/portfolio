@@ -71,6 +71,9 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-spotlight: var(--spotlight);
   --color-text-glow: var(--text-glow);
+  --color-card-glow: var(--card-glow);
+  --color-card-glow-inner: var(--card-glow-inner);
+  --color-card-border-glow: var(--card-border-glow);
 }
 
 :root {
@@ -109,6 +112,9 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
   --spotlight: oklch(0.6 0.15 260 / 6%);
   --text-glow: oklch(0.6 0.18 290 / 22%);
+  --card-glow: oklch(0.6 0.18 290 / 8%);
+  --card-glow-inner: oklch(0.6 0.18 290 / 4%);
+  --card-border-glow: oklch(0.6 0.18 290 / 15%);
 }
 
 .dark {
@@ -146,6 +152,9 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
   --spotlight: oklch(0.65 0.18 260 / 12%);
   --text-glow: oklch(0.65 0.22 290 / 65%);
+  --card-glow: oklch(0.65 0.22 290 / 22%);
+  --card-glow-inner: oklch(0.65 0.22 290 / 10%);
+  --card-border-glow: oklch(0.65 0.22 290 / 35%);
 }
 
 @layer base {
@@ -182,6 +191,16 @@ h1, h2, h3, .char, .typing-hero {
 .is-scrolling .char,
 .is-scrolling .typing-hero {
   text-shadow: 0 0 10px var(--color-text-glow), 0 0 20px var(--color-text-glow);
+}
+
+/* Card glow transition during active scroll */
+.bg-card {
+  transition: box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.is-scrolling .bg-card {
+  border-color: var(--color-card-border-glow) !important;
+  box-shadow: 0 0 25px 3px var(--color-card-glow), inset 0 0 15px 0 var(--color-card-glow-inner) !important;
 }
 
 @keyframes typing-hero {

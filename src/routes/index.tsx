@@ -67,7 +67,6 @@ const navSections = [
 ];
 
 const heroFramePath = (i: number) => `/frames/frame_${String(i).padStart(4, "0")}.jpg`;
-const outroFramePath = (i: number) => `/frames2/frame_${String(i).padStart(4, "0")}.jpg`;
 
 function Index() {
   const [activeRepo, setActiveRepo] = useState<Repo | null>(null);
@@ -171,17 +170,6 @@ function Index() {
       <AllRepos repos={liveRepos} onOpen={setActiveRepo} />
       <About />
       <Contact />
-      {/* Scroll-scrubbed canvas sequence for 2.mp4 at the end of the website */}
-      <ScrollSequence
-        frameCount={240}
-        framePath={outroFramePath}
-      >
-        <div className="absolute inset-x-0 bottom-10 flex justify-center">
-          <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground backdrop-blur-md">
-            scroll-driven · 240 frames · canvas (outro)
-          </p>
-        </div>
-      </ScrollSequence>
       <footer className="border-t border-border py-10 text-center text-sm text-muted-foreground">
         © {new Date().getFullYear()} RDM · therdm.dev
       </footer>
