@@ -681,8 +681,20 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
 function About() {
   return (
     <section id="about" className="mx-auto max-w-3xl px-6 py-28">
-      <SectionLabel eyebrow="About" title="A simple journey." />
-      <div className="mt-12 space-y-10 border-l border-border pl-8">
+      <SectionLabel eyebrow="About" title="About Me" />
+      <p className="mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground">
+        I’m Dr RDM, a passionate Web3 developer specializing in smart contracts, React, and decentralized applications (dApps). I thrive on building and testing projects in testnets, exploring the cutting edge of blockchain technology. With 2k followers on YouTube (
+        <a 
+          href="https://youtube.com/@rdmbtc" 
+          target="_blank" 
+          rel="noreferrer" 
+          className="text-foreground underline underline-offset-4 hover:opacity-80 transition-opacity"
+        >
+          @rdmbtc
+        </a>
+        ), I love sharing my journey and knowledge with the community.
+      </p>
+      <div className="mt-16 space-y-10 border-l border-border pl-8">
         {timeline.map((t) => (
           <div key={t.year} className="relative">
             <span className="absolute -left-[33px] top-1.5 h-2 w-2 rounded-full bg-foreground ring-4 ring-background" />
