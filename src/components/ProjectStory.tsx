@@ -29,38 +29,34 @@ export default function ProjectStory({ repo, index, onOpen }: Props) {
       const frames = track.querySelectorAll<HTMLElement>("[data-story-frame]");
 
       const tl = gsap.timeline({
-        defaults: { ease: "none" },
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: `+=${frames.length * 70}%`,
+          end: `+=${frames.length * 100}%`,
           pin: true,
-          scrub: 0.6,
+          scrub: 0.5,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
 
-      tl.to(track, { xPercent: -100 * (frames.length - 1) });
+      // Animate track horizontally
+      tl.to(track, { xPercent: -100 * (frames.length - 1), duration: 1, ease: "none" });
 
-      // Subtle parallax on each frame's "content" layer
+      // Subtle parallax on each frame's "content" layer sequenced in the timeline
       frames.forEach((f, i) => {
         const content = f.querySelector<HTMLElement>("[data-story-content]");
-        if (!content) return;
-        gsap.fromTo(
+        if (!content || i === 0) return; // First frame is already visible
+        
+        // Frame i enters during the track progress from (i-1)/(frames.length-1) to i/(frames.length-1).
+        const duration = 0.4;
+        const start = (i / (frames.length - 1)) - 0.45;
+        
+        tl.fromTo(
           content,
-          { y: 40, opacity: 0.6 },
-          {
-            y: 0,
-            opacity: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: root,
-              start: `top+=${i * 60}% top`,
-              end: `top+=${(i + 1) * 60}% top`,
-              scrub: true,
-            },
-          }
+          { y: 50, opacity: 0, filter: "blur(4px)" },
+          { y: 0, opacity: 1, filter: "blur(0px)", ease: "power2.out", duration },
+          start
         );
       });
     }, root);

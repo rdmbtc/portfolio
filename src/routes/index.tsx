@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { Github, Mail, Linkedin, Check, ArrowUpRight, Star, ExternalLink, Search, X, Sun, Moon } from "lucide-react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ScrollSequence from "@/components/ScrollSequence";
 import HorizontalScroll from "@/components/HorizontalScroll";
 import SectionNav from "@/components/SectionNav";
@@ -65,6 +66,29 @@ const navSections = [
 function Index() {
   const [activeRepo, setActiveRepo] = useState<Repo | null>(null);
   const meta = useRepoMeta();
+
+  // Refresh ScrollTrigger positions when page finishes loading
+  useEffect(() => {
+    const handleLoad = () => {
+      ScrollTrigger.refresh();
+    };
+    if (document.readyState === "complete") {
+      ScrollTrigger.refresh();
+    } else {
+      window.addEventListener("load", handleLoad);
+    }
+    return () => window.removeEventListener("load", handleLoad);
+  }, []);
+
+  // Refresh ScrollTrigger positions after repo metadata is loaded and changes layouts
+  useEffect(() => {
+    if (Object.keys(meta).length > 0) {
+      const t = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 150);
+      return () => clearTimeout(t);
+    }
+  }, [meta]);
 
   // Merge live GitHub metadata (stars/language/description) on top of the
   // static list — cached in localStorage so search/filters stay instant.
@@ -445,6 +469,10 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
     });
     return list;
   }, [items, query, activeTag, sort]);
+
+  useEffect(() => {
+    ScrollTrigger.refresh();
+  }, [filtered.length]);
 
   useEffect(() => {
     const container = sortContainerRef.current;
