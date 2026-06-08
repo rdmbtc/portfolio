@@ -99,6 +99,24 @@ function Index() {
     };
   }, []);
 
+  // Handle scrolling state to toggle neon glow text shadows on active scroll
+  useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout | number;
+    const handleScroll = () => {
+      document.documentElement.classList.add("is-scrolling");
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        document.documentElement.classList.remove("is-scrolling");
+      }, 150);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
+
   // Refresh ScrollTrigger positions when page finishes loading
   useEffect(() => {
     const handleLoad = () => {
@@ -443,7 +461,7 @@ function Hero() {
                   I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.
                 </p>
                 <p className="mt-4 text-sm sm:text-base text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--4">
-                  <span className="typing font-mono text-sm sm:text-base">therdm.dev</span>
+                  <span className="typing-hero font-mono text-sm sm:text-base">therdm.dev</span>
                 </p>
               </div>
 
