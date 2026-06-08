@@ -15,6 +15,8 @@ import Lenis from "lenis";
 import Magnetic from "@/components/Magnetic";
 import SplitTextReveal from "@/components/SplitTextReveal";
 
+import { toast, Toaster } from "sonner";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -157,8 +159,26 @@ function Index() {
   }, [meta]);
   const liveFeatured = useMemo(() => liveRepos.slice(0, 6), [liveRepos]);
 
+  // Scroll progress bar logic
+  const [scrollProgress, setScrollProgress] = useState(0);
+  useEffect(() => {
+    const handleScrollProgress = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        setScrollProgress((window.scrollY / totalHeight) * 100);
+      }
+    };
+    window.addEventListener("scroll", handleScrollProgress, { passive: true });
+    return () => window.removeEventListener("scroll", handleScrollProgress);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* Scroll Progress Bar */}
+      <div 
+        className="fixed top-0 left-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 z-[60] transition-all duration-75"
+        style={{ width: `${scrollProgress}%` }}
+      />
       <Nav />
       <SectionNav sections={navSections} />
       <Hero />
@@ -175,6 +195,7 @@ function Index() {
       </footer>
       <ProjectModal repo={activeRepo} onOpenChange={(o) => !o && setActiveRepo(null)} />
       <PerfHud />
+      <Toaster position="bottom-right" theme="dark" closeButton richColors />
     </div>
   );
 }
@@ -952,13 +973,27 @@ function Contact() {
     } as React.CSSProperties;
   };
 
+  const handleDiscordClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigator.clipboard.writeText("therdm");
+    toast.success('Discord username "therdm" copied!', {
+      description: "Open Discord and search for it to send a friend request.",
+    });
+    window.open("https://discord.com/channels/@me", "_blank");
+  };
+
   const links = [
     { href: "https://github.com/rdmbtc", label: "GitHub", icon: <Github className="h-4 w-4" /> },
     { href: "https://www.linkedin.com/in/natlusrun/", label: "LinkedIn", icon: <Linkedin className="h-4 w-4" /> },
     { href: "https://www.x.com/@rdmnad", label: "X (Twitter)", icon: <TwitterIcon className="h-4 w-4" /> },
-    { href: "https://discord.com", label: "Discord: therdm", icon: <DiscordIcon className="h-4 w-4" /> },
+    { 
+      href: "https://discord.com", 
+      label: "Discord: therdm", 
+      icon: <DiscordIcon className="h-4 w-4" />,
+      onClick: handleDiscordClick
+    },
     { href: "https://youtube.com/@rdmdev", label: "YouTube", icon: <YoutubeIcon className="h-4 w-4" /> },
-    { href: "mailto:hello@therdm.dev", label: "Email", icon: <Mail className="h-4 w-4" /> },
+    { href: "mailto:rdmstack@gmail.com", label: "Email", icon: <Mail className="h-4 w-4" /> },
   ];
 
   return (
@@ -970,7 +1005,7 @@ function Contact() {
       <div className="mt-10 flex flex-col items-center gap-6">
         <Magnetic radius={60} strength={0.4}>
           <a
-            href="mailto:hello@therdm.dev"
+            href="mailto:rdmstack@gmail.com"
             className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:scale-[1.02] hover:shadow-[0_10px_30px_-10px_oklch(0.15_0.005_260_/_0.4)]"
           >
             Let's build together
@@ -986,7 +1021,7 @@ function Contact() {
               style={getStyle(i)}
               className="t-avatar"
             >
-              <IconLink href={link.href} label={link.label}>
+              <IconLink href={link.href} label={link.label} onClick={link.onClick}>
                 {link.icon}
               </IconLink>
             </div>
@@ -997,11 +1032,22 @@ function Contact() {
   );
 }
 
-function IconLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
+function IconLink({ 
+  href, 
+  label, 
+  onClick, 
+  children 
+}: { 
+  href: string; 
+  label: string; 
+  onClick?: (e: React.MouseEvent) => void; 
+  children: React.ReactNode 
+}) {
   return (
     <a
       href={href}
       aria-label={label}
+      onClick={onClick}
       className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
     >
       {children}
