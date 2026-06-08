@@ -167,23 +167,54 @@ function Nav() {
     }
   };
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    if (id === "top") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (typeof window !== "undefined") {
+        window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+      }
+      return;
+    }
+
+    const element = document.getElementById(id);
+    if (element) {
+      const trigger = ScrollTrigger.getAll().find((st) => st.trigger === element);
+      if (trigger) {
+        window.scrollTo({
+          top: trigger.start,
+          behavior: "smooth",
+        });
+      } else {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      if (typeof window !== "undefined") {
+        window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#${id}`);
+      }
+    }
+  };
+
   return (
     <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-full flex justify-center px-4">
       <div
         className="pointer-events-auto flex items-center justify-between rounded-full border shadow-2xl bg-background/95 text-foreground border-border/80 backdrop-blur-xl px-4 py-2 sm:px-6 sm:py-3 w-full max-w-[480px] sm:max-w-xl md:max-w-2xl h-12 sm:h-14 md:h-16"
       >
         {/* Logo - always visible */}
-        <a href="#top" className="text-xs sm:text-sm md:text-base font-bold tracking-tight shrink-0 flex items-center gap-1.5 sm:gap-2 pl-1 sm:pl-2 hover:opacity-85 transition-opacity">
+        <a
+          href="#top"
+          onClick={(e) => handleNavClick(e, "top")}
+          className="text-xs sm:text-sm md:text-base font-bold tracking-tight shrink-0 flex items-center gap-1.5 sm:gap-2 pl-1 sm:pl-2 hover:opacity-85 transition-opacity"
+        >
           <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)] animate-pulse" />
           <span>RDM</span>
         </a>
 
         {/* Full Menu Content - always shown */}
         <nav className="flex gap-3 sm:gap-5 md:gap-6 text-xs sm:text-sm md:text-[15px] font-semibold text-muted-foreground/90">
-          <a href="#work" className="hover:text-foreground transition-colors py-1">Work</a>
-          <a href="#repos" className="hover:text-foreground transition-colors py-1">Repos</a>
-          <a href="#stack" className="hover:text-foreground transition-colors py-1">Stack</a>
-          <a href="#about" className="hover:text-foreground transition-colors py-1">About</a>
+          <a href="#work" onClick={(e) => handleNavClick(e, "work")} className="hover:text-foreground transition-colors py-1">Work</a>
+          <a href="#repos" onClick={(e) => handleNavClick(e, "repos")} className="hover:text-foreground transition-colors py-1">Repos</a>
+          <a href="#stack" onClick={(e) => handleNavClick(e, "stack")} className="hover:text-foreground transition-colors py-1">Stack</a>
+          <a href="#about" onClick={(e) => handleNavClick(e, "about")} className="hover:text-foreground transition-colors py-1">About</a>
         </nav>
 
         {/* Actions - always shown */}
@@ -202,7 +233,11 @@ function Nav() {
               </span>
             </div>
           </button>
-          <a href="#contact" className="rounded-full bg-primary text-primary-foreground px-3.5 py-1.5 sm:px-4.5 sm:py-2 text-[10px] sm:text-xs md:text-sm font-bold hover:opacity-90 transition-opacity">
+          <a
+            href="#contact"
+            onClick={(e) => handleNavClick(e, "contact")}
+            className="rounded-full bg-primary text-primary-foreground px-3.5 py-1.5 sm:px-4.5 sm:py-2 text-[10px] sm:text-xs md:text-sm font-bold hover:opacity-90 transition-opacity"
+          >
             Contact
           </a>
         </div>
