@@ -72,10 +72,10 @@ export default function SectionNav({ sections }: { sections: NavSection[] }) {
           >
             <span
               className={`block rounded-full transition-all duration-300 ${
-                isActive ? "h-6 w-1.5 bg-foreground" : "h-1.5 w-1.5 bg-muted-foreground/40 group-hover:bg-foreground/60"
+                isActive ? "h-6 w-1.5 bg-foreground" : "h-1.5 w-1.5 bg-muted-foreground/65 group-hover:bg-foreground/80"
               }`}
             />
-            <span className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-md border border-border/80 bg-background/80 px-2 py-1 text-[10px] font-medium uppercase tracking-widest opacity-0 translate-x-1 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 backdrop-blur-md">
+            <span className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-md border border-border/80 bg-background/80 px-2 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-widest opacity-0 translate-x-1 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 backdrop-blur-md">
               {s.label}
             </span>
           </button>

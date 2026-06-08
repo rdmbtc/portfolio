@@ -62,7 +62,7 @@ export default function ProjectModal({ repo, onOpenChange }: Props) {
                 </span>
               )}
               {repo.homepage && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-emerald-600">
+                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-emerald-600 dark:text-emerald-400 font-medium">
                   ● live
                 </span>
               )}
@@ -111,7 +111,7 @@ export default function ProjectModal({ repo, onOpenChange }: Props) {
 
             {/* Readme summary */}
             <div className="mt-6">
-              <h4 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Readme summary</h4>
+              <h4 className="font-mono text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-muted-foreground">Readme summary</h4>
               <p className="mt-2 text-sm leading-relaxed text-foreground/90">
                 {repo.readme ?? repo.description ?? "Open on GitHub for full documentation."}
               </p>
@@ -119,7 +119,7 @@ export default function ProjectModal({ repo, onOpenChange }: Props) {
 
             {/* Tech stack / tags */}
             <div className="mt-6">
-              <h4 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Tech & tags</h4>
+              <h4 className="font-mono text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-muted-foreground">Tech & tags</h4>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {repo.language && <Badge variant="secondary">{repo.language}</Badge>}
                 {repo.tags.map((tag) => (

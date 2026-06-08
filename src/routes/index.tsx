@@ -305,7 +305,7 @@ function Hero() {
             <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground backdrop-blur-md">
               scroll-driven · 240 frames · canvas
             </p>
-            <p className="animate-bounce font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground/60">
+            <p className="animate-bounce font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground/85">
               ↓ scroll
             </p>
           </div>
@@ -323,11 +323,24 @@ function Skills() {
         {stack.map((s, i) => (
           <div
             key={s}
-            className="group flex items-center justify-between rounded-xl border border-border bg-card px-4 py-4 transition-colors hover:border-foreground/20"
+            className="group relative flex items-center justify-between rounded-xl border border-border bg-card px-4 py-4 transition-all hover:border-foreground/20 overflow-hidden"
             style={{ animationDelay: `${i * 60}ms` }}
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
+              e.currentTarget.style.setProperty("--y", `${e.clientY - rect.top}px`);
+            }}
           >
-            <span className="text-sm font-medium">{s}</span>
-            <Check className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-emerald-500" strokeWidth={2.5} />
+            <div
+              className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style={{
+                background: `radial-gradient(150px circle at var(--x, 0px) var(--y, 0px), var(--color-spotlight), transparent 85%)`,
+              }}
+            />
+            <div className="relative z-10 flex items-center justify-between w-full">
+              <span className="text-sm font-medium">{s}</span>
+              <Check className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-emerald-500" strokeWidth={2.5} />
+            </div>
           </div>
         ))}
       </div>
@@ -370,7 +383,7 @@ function Marquee() {
     <section className="relative overflow-hidden border-b border-border py-8">
       <div className="flex gap-12 whitespace-nowrap [animation:marquee_40s_linear_infinite]">
         {loop.map((t, i) => (
-          <span key={i} className="font-mono text-2xl text-muted-foreground/70 sm:text-3xl">
+          <span key={i} className="font-mono text-2xl text-muted-foreground/90 sm:text-3xl">
             {t} <span className="text-foreground/20">·</span>
           </span>
         ))}
@@ -617,28 +630,41 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
           <button
             key={r.name}
             onClick={() => onOpen(r)}
-            className="group flex flex-col gap-2 rounded-xl border border-border bg-card p-5 text-left transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-[0_12px_30px_-15px_oklch(0.15_0.005_260_/_0.2)]"
+            className="group relative flex flex-col gap-2 rounded-xl border border-border bg-card p-5 text-left transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-[0_12px_30px_-15px_oklch(0.15_0.005_260_/_0.15)] dark:hover:shadow-[0_12px_30px_-15px_oklch(0.99_0_0_/_0.03)] overflow-hidden"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
+              e.currentTarget.style.setProperty("--y", `${e.clientY - rect.top}px`);
+            }}
           >
-            <div className="flex items-start justify-between gap-3">
-              <h3 className="truncate font-semibold tracking-tight">{r.name}</h3>
-              <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground" />
-            </div>
-            {r.description && (
-              <p className="line-clamp-2 text-sm text-muted-foreground">{r.description}</p>
-            )}
-            {r.tags.length > 0 && (
-              <div className="mt-1 flex flex-wrap gap-1">
-                {r.tags.slice(0, 3).map((tag) => (
-                  <span key={tag} className="rounded-full border border-border/60 bg-secondary/40 px-2.5 py-0.5 text-[11px] sm:text-xs text-muted-foreground font-medium">
-                    {tag}
-                  </span>
-                ))}
+            <div
+              className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style={{
+                background: `radial-gradient(300px circle at var(--x, 0px) var(--y, 0px), var(--color-spotlight), transparent 85%)`,
+              }}
+            />
+            <div className="relative z-10 flex flex-col gap-2 w-full h-full">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="truncate font-semibold tracking-tight">{r.name}</h3>
+                <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground" />
               </div>
-            )}
-            <div className="mt-auto flex items-center gap-3 pt-2 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground font-semibold">
-              <span className="inline-flex items-center gap-1.5"><LangDot lang={r.language} /> {r.language ?? "—"}</span>
-              {r.stars > 0 && <span className="inline-flex items-center gap-1.5"><Star className="h-3.5 w-3.5" /> {r.stars}</span>}
-              {r.homepage && <span className="ml-auto inline-flex items-center gap-1 text-emerald-600/80">● live</span>}
+              {r.description && (
+                <p className="line-clamp-2 text-sm text-muted-foreground">{r.description}</p>
+              )}
+              {r.tags.length > 0 && (
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {r.tags.slice(0, 3).map((tag) => (
+                    <span key={tag} className="rounded-full border border-border/60 bg-secondary/40 px-2.5 py-0.5 text-[11px] sm:text-xs text-muted-foreground font-medium">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div className="mt-auto flex items-center gap-3 pt-2 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground font-semibold">
+                <span className="inline-flex items-center gap-1.5"><LangDot lang={r.language} /> {r.language ?? "—"}</span>
+                {r.stars > 0 && <span className="inline-flex items-center gap-1.5"><Star className="h-3.5 w-3.5" /> {r.stars}</span>}
+                {r.homepage && <span className="ml-auto inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold">● live</span>}
+              </div>
             </div>
           </button>
         ))}

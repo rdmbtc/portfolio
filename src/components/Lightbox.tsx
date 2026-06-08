@@ -94,7 +94,7 @@ export default function Lightbox({ images, open, startIndex = 0, onClose, alt }:
           className="max-h-[90vh] max-w-[92vw] rounded-lg object-contain shadow-2xl"
         />
         {images.length > 1 && (
-          <figcaption className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-white/80">
+          <figcaption className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 font-mono text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-white/80">
             {index + 1} / {images.length}
           </figcaption>
         )}

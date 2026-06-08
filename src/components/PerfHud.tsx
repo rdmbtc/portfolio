@@ -30,7 +30,7 @@ export default function PerfHud() {
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-4 left-4 z-[70] flex items-center gap-2 rounded-full border border-border bg-background/90 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest shadow-lg backdrop-blur-md"
+      className="fixed bottom-4 left-4 z-[70] flex items-center gap-2 rounded-full border border-border bg-background/90 px-3 py-1.5 font-mono text-[11px] sm:text-xs font-semibold uppercase tracking-widest shadow-lg backdrop-blur-md"
     >
       <span className={`h-2 w-2 rounded-full ${fps >= 50 ? "bg-emerald-500" : fps >= 35 ? "bg-yellow-500" : "bg-red-500"}`} />
       <span className={color}>{fps.toFixed(0)} fps</span>
