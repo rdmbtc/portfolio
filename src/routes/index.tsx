@@ -151,15 +151,24 @@ function Hero() {
   }, []);
 
   return (
-    <section id="top" className="relative">
+    <section id="top" className="relative overflow-hidden">
+      {/* Ambient background glows */}
+      <div className="pointer-events-none absolute inset-x-0 -top-40 -z-10 flex justify-center">
+        <div className="h-[350px] w-[600px] rounded-full bg-indigo-500/10 blur-[120px] dark:bg-indigo-500/5" />
+        <div className="h-[250px] w-[400px] rounded-full bg-pink-500/10 blur-[100px] dark:bg-pink-500/5 -ml-20" />
+      </div>
+
       {/* Intro */}
       <div className={`relative mx-auto max-w-6xl px-6 pt-24 pb-16 text-center sm:pt-32 t-stagger ${isShown ? "is-shown" : ""}`}>
         <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3 py-1 text-xs text-muted-foreground t-stagger-line t-stagger-line--1">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           Available for new work · Q3 2026
         </div>
-        <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-7xl t-stagger-line t-stagger-line--2">
-          Clean, modern web products,<br />shipped with care.
+        <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-7xl t-stagger-line t-stagger-line--2 leading-tight">
+          Clean, modern web products,<br />
+          <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+            shipped with care.
+          </span>
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-balance text-base text-muted-foreground sm:text-lg t-stagger-line t-stagger-line--3">
           I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.

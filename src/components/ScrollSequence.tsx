@@ -14,6 +14,7 @@ interface Props {
 export default function ScrollSequence({ frameCount, framePath, children }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -107,7 +108,7 @@ export default function ScrollSequence({ frameCount, framePath, children }: Prop
       start: "top top",
       end: "bottom bottom",
       scrub: isMobile ? 0.8 : 0.5,
-      pin: ".scroll-seq-pin",
+      pin: pinRef.current,
       pinSpacing: false,
       onUpdate: (self) => {
         // Quantize frame index by qualityStep so we render less work on jank.
@@ -139,7 +140,7 @@ export default function ScrollSequence({ frameCount, framePath, children }: Prop
 
   return (
     <section ref={containerRef} className="relative" style={{ height: "300vh" }}>
-      <div className="scroll-seq-pin relative h-screen w-full overflow-hidden">
+      <div ref={pinRef} className="relative h-screen w-full overflow-hidden">
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
         <div className="pointer-events-none absolute inset-0">{children}</div>
       </div>
