@@ -212,34 +212,11 @@ function Hero() {
   }, []);
 
   return (
-    <section id="top" className="relative overflow-hidden">
+    <section id="top" className="relative">
       {/* Ambient background glows */}
       <div className="pointer-events-none absolute inset-x-0 -top-40 -z-10 flex justify-center">
         <div className="h-[350px] w-[600px] rounded-full bg-indigo-500/10 blur-[120px] dark:bg-indigo-500/5" />
         <div className="h-[250px] w-[400px] rounded-full bg-pink-500/10 blur-[100px] dark:bg-pink-500/5 -ml-20" />
-      </div>
-
-      {/* Intro */}
-      <div className={`relative mx-auto max-w-6xl px-6 pt-24 pb-16 text-center sm:pt-32 t-stagger ${isShown ? "is-shown" : ""}`}>
-        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3 py-1 text-xs text-muted-foreground t-stagger-line t-stagger-line--1">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          Available for new work · Q3 2026
-        </div>
-        <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-7xl t-stagger-line t-stagger-line--2 leading-tight">
-          Clean, modern web products,<br />
-          <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-            shipped with care.
-          </span>
-        </h1>
-        <p className="mx-auto mt-6 max-w-xl text-balance text-base text-muted-foreground sm:text-lg t-stagger-line t-stagger-line--3">
-          I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.
-        </p>
-        <p className="mt-4 text-sm text-muted-foreground t-stagger-line t-stagger-line--4">
-          <span className="typing font-mono">therdm.dev</span>
-        </p>
-        <p className="mt-10 animate-bounce font-mono text-xs uppercase tracking-widest text-muted-foreground t-stagger-line t-stagger-line--5">
-          ↓ scroll
-        </p>
       </div>
 
       {/* Scroll-scrubbed canvas sequence */}
@@ -247,10 +224,34 @@ function Hero() {
         frameCount={240}
         framePath={(i) => `/frames/frame_${String(i).padStart(4, "0")}.jpg`}
       >
-        <div className="absolute inset-x-0 bottom-10 flex justify-center">
-          <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur-md">
-            scroll-driven · 240 frames · canvas
-          </p>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+          <div className={`max-w-4xl pointer-events-auto t-stagger ${isShown ? "is-shown" : ""}`}>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1 text-xs text-muted-foreground backdrop-blur-md t-stagger-line t-stagger-line--1">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Available for new work · Q3 2026
+            </div>
+            <h1 className="text-balance text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight t-stagger-line t-stagger-line--2 leading-[1.15] text-foreground">
+              Clean, modern web products,<br />
+              <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                shipped with care.
+              </span>
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-balance text-sm sm:text-base md:text-lg text-muted-foreground t-stagger-line t-stagger-line--3 leading-relaxed">
+              I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.
+            </p>
+            <p className="mt-4 text-sm text-muted-foreground t-stagger-line t-stagger-line--4">
+              <span className="typing font-mono text-xs sm:text-sm">therdm.dev</span>
+            </p>
+          </div>
+
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
+            <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[9px] uppercase tracking-widest text-muted-foreground backdrop-blur-md">
+              scroll-driven · 240 frames · canvas
+            </p>
+            <p className="animate-bounce font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">
+              ↓ scroll
+            </p>
+          </div>
         </div>
       </ScrollSequence>
     </section>
