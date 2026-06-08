@@ -41,7 +41,7 @@ export default function ProjectStory({ repo, index, onOpen }: Props) {
       });
 
       // Animate track horizontally
-      tl.to(track, { xPercent: -100 * (frames.length - 1), duration: 1, ease: "none" });
+      tl.to(track, { xPercent: -100 * (frames.length - 1) / frames.length, duration: 1, ease: "none" });
 
       // Subtle parallax on each frame's "content" layer sequenced in the timeline
       frames.forEach((f, i) => {
