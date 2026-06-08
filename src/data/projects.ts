@@ -13,13 +13,79 @@ export interface Repo {
 const t = (...tags: string[]) => tags;
 
 export const repos: Repo[] = [
-  { name: "Puls", description: "Mobile-first prediction market on Arc Testnet. Google sign-in → Circle MPC wallet → trade Polymarket predictions with USDC as gas.", language: "Dart", stars: 1, url: "https://github.com/rdmbtc/Puls", homepage: "https://pulsmarket.tech", tags: t("web3","mobile","fintech","wallet"), readme: "Puls is a mobile-first prediction market built on the Arc Testnet. It abstracts crypto complexity with a Google sign-in flow that provisions a Circle MPC wallet behind the scenes — users trade Polymarket-style predictions using USDC as gas. Built with Flutter for cross-platform delivery, integrated with Circle's programmable wallets, and live at pulsmarket.tech." },
-  { name: "MonDefense", description: "Tower defense game built for Monad Mission 7.", language: "JavaScript", stars: 1, url: "https://github.com/rdmbtc/MonDefense", homepage: "https://mondefense.vercel.app", tags: t("game","web3","monad"), readme: "Tower defense game built for Monad Mission 7. Deploy towers, defend the chain, climb the leaderboard. Vanilla JS canvas rendering with on-chain score submission." },
-  { name: "3D Black Hole", description: "Stunning 3D simulation of a black hole using Three.js.", language: "JavaScript", stars: 0, url: "https://github.com/rdmbtc/3D-simulation-of-a-Black-Hole", homepage: null, tags: t("3d","threejs","graphics","experiment"), readme: "A real-time 3D simulation of a black hole rendered with Three.js. Features gravitational lensing approximation, accretion disk shaders, and orbiting camera controls." },
-  { name: "Hivemind", description: "Collective intelligence platform.", language: "TypeScript", stars: 0, url: "https://github.com/rdmbtc/Hivemind", homepage: "https://hivemind-theta.vercel.app", tags: t("ai","platform","collab") },
-  { name: "RitualPulse", description: "Habit and ritual tracker with daily pulse.", language: "TypeScript", stars: 0, url: "https://github.com/rdmbtc/RitualPulse", homepage: "https://ritual-pulse-five.vercel.app", tags: t("productivity","tracker","mobile") },
-  { name: "RitualScroll", description: "Scroll-driven storytelling experience.", language: "TypeScript", stars: 0, url: "https://github.com/rdmbtc/RitualScroll", homepage: "https://ritual-scroll.vercel.app", tags: t("storytelling","animation","gsap") },
-  { name: "RitCode", description: "Code editor playground.", language: "TypeScript", stars: 0, url: "https://github.com/rdmbtc/RitCode", homepage: "https://rit-code.vercel.app", tags: t("editor","tool","dx") },
+  { 
+    name: "Puls", 
+    description: "Mobile-first prediction market on Arc Testnet. Google sign-in → Circle MPC wallet → trade Polymarket predictions with USDC as gas.", 
+    language: "Dart", 
+    stars: 1, 
+    url: "https://github.com/rdmbtc/Puls", 
+    homepage: "https://pulsmarket.tech", 
+    tags: t("web3","mobile","fintech","wallet"), 
+    readme: "Puls is a mobile-first prediction market built on the Arc Testnet. It abstracts crypto complexity with a Google sign-in flow that provisions a Circle MPC wallet behind the scenes — users trade Polymarket-style predictions using USDC as gas. Built with Flutter for cross-platform delivery, integrated with Circle's programmable wallets, and live at pulsmarket.tech.",
+    screenshots: ["/pulsmarket.tech.png", "/pulsmarket.tech mobile.png"]
+  },
+  { 
+    name: "MonDefense", 
+    description: "Tower defense game built for Monad Mission 7.", 
+    language: "JavaScript", 
+    stars: 1, 
+    url: "https://github.com/rdmbtc/MonDefense", 
+    homepage: "https://mondefense.vercel.app", 
+    tags: t("game","web3","monad"), 
+    readme: "Tower defense game built for Monad Mission 7. Deploy towers, defend the chain, climb the leaderboard. Vanilla JS canvas rendering with on-chain score submission.",
+    screenshots: ["/mondefense.vercel.app_(pc).png"]
+  },
+  { 
+    name: "BobArcPay", 
+    description: "AI payment agent on Arc testnet. Link your Twitter handle and send USDC with a tweet reply.", 
+    language: "TypeScript", 
+    stars: 1, 
+    url: "https://github.com/rdmbtc/bobarcpay", 
+    homepage: "https://bobarcpay.vercel.app", 
+    tags: t("web3","agent","circle-wallets","payments"), 
+    readme: "BobArcPay is an automated Twitter payment agent built on the Arc Testnet. Users link their Twitter handles to their Arc wallets, allowing them to send testnet USDC simply by replying to posts with '@bobarcpay send 20 usdc'. The agent processes transfers securely using Circle programmable wallets and responds with transaction receipts and explorer links.",
+    screenshots: ["/bobarcpay.vercel.app.png"]
+  },
+  { 
+    name: "Hivemind", 
+    description: "Collective intelligence platform.", 
+    language: "TypeScript", 
+    stars: 0, 
+    url: "https://github.com/rdmbtc/Hivemind", 
+    homepage: "https://hivemind-theta.vercel.app", 
+    tags: t("ai","platform","collab"),
+    screenshots: ["/hivemind-protocol.vercel.app_(pc).png"]
+  },
+  { 
+    name: "RitualPulse", 
+    description: "Habit and ritual tracker with daily pulse.", 
+    language: "TypeScript", 
+    stars: 0, 
+    url: "https://github.com/rdmbtc/RitualPulse", 
+    homepage: "https://ritual-pulse-five.vercel.app", 
+    tags: t("productivity","tracker","mobile"),
+    screenshots: ["/ritualblocks.vercel.app_(pc) (2).png"]
+  },
+  { 
+    name: "RitualScroll", 
+    description: "Scroll-driven storytelling experience.", 
+    language: "TypeScript", 
+    stars: 0, 
+    url: "https://github.com/rdmbtc/RitualScroll", 
+    homepage: "https://ritual-scroll.vercel.app", 
+    tags: t("storytelling","animation","gsap"),
+    screenshots: ["/ritualscroll.vercel.app_(pc) (1).png"]
+  },
+  { 
+    name: "RitCode", 
+    description: "Code editor playground.", 
+    language: "TypeScript", 
+    stars: 0, 
+    url: "https://github.com/rdmbtc/RitCode", 
+    homepage: "https://rit-code.vercel.app", 
+    tags: t("editor","tool","dx"),
+    screenshots: ["/rit-code.png"]
+  },
   { name: "RitDefense", description: "Tower defense game in JS.", language: "JavaScript", stars: 0, url: "https://github.com/rdmbtc/RitDefense", homepage: "https://rit-defense.vercel.app", tags: t("game") },
   { name: "riteforge", description: "Forging workflows for builders.", language: "TypeScript", stars: 0, url: "https://github.com/rdmbtc/riteforge", homepage: "https://riteforge.vercel.app", tags: t("tool","productivity") },
   { name: "monadfarm", description: "Farming game on Monad.", language: "TypeScript", stars: 0, url: "https://github.com/rdmbtc/monadfarm", homepage: "https://monadfarm.vercel.app", tags: t("game","web3","monad") },
