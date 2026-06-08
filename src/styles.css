@@ -981,3 +981,28 @@
   .t-tt { transition: none !important; }
 }
 
+/* Swapper text animation */
+@keyframes textSwapper {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) skewY(1deg);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) skewY(0deg);
+    filter: blur(0);
+  }
+}
+
+.animate-text-swap {
+  animation: textSwapper 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-text-swap {
+    animation: none !important;
+  }
+}
+
+

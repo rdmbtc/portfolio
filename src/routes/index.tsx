@@ -187,10 +187,18 @@ function Nav() {
   );
 }
 
+const phrases = ["with care.", "with speed.", "with precision.", "with purpose."];
+
 function Hero() {
   const [isShown, setIsShown] = useState(false);
+  const [phraseIdx, setPhraseIdx] = useState(0);
+
   useEffect(() => {
     setIsShown(true);
+    const interval = setInterval(() => {
+      setPhraseIdx((prev) => (prev + 1) % phrases.length);
+    }, 3500);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -215,8 +223,12 @@ function Hero() {
             </div>
             <h1 className="text-balance text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight t-stagger-line t-stagger-line--2 leading-[1.15] text-foreground">
               Clean, modern web products,<br />
-              <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                shipped with care.
+              <span>shipped </span>
+              <span
+                key={phraseIdx}
+                className="inline-block bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-text-swap"
+              >
+                {phrases[phraseIdx]}
               </span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-balance text-sm sm:text-base md:text-lg text-muted-foreground t-stagger-line t-stagger-line--3 leading-relaxed">
