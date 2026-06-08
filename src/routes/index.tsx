@@ -119,8 +119,6 @@ function Index() {
 
 function Nav() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("theme") as "light" | "dark" | null;
@@ -132,12 +130,6 @@ function Nav() {
     } else {
       document.documentElement.classList.remove("dark");
     }
-
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 80);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleTheme = () => {
@@ -151,55 +143,45 @@ function Nav() {
     }
   };
 
-  const showFull = isScrolled || isHovered;
-
   return (
     <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-full flex justify-center px-4">
       <div
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className={`pointer-events-auto flex items-center justify-between rounded-full border shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] bg-background/90 text-foreground border-border/60 backdrop-blur-xl px-4 py-2 ${
-          showFull ? "w-full max-w-xl h-12" : "w-32 h-10"
-        }`}
+        className="pointer-events-auto flex items-center justify-between rounded-full border shadow-2xl bg-background/95 text-foreground border-border/80 backdrop-blur-xl px-4 py-2 sm:px-6 sm:py-3 w-full max-w-[480px] sm:max-w-xl md:max-w-2xl h-12 sm:h-14 md:h-16"
       >
         {/* Logo - always visible */}
-        <a href="#top" className="text-xs font-semibold tracking-tight shrink-0 flex items-center gap-1.5 pl-1.5">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-semibold">RDM</span>
+        <a href="#top" className="text-xs sm:text-sm md:text-base font-bold tracking-tight shrink-0 flex items-center gap-1.5 sm:gap-2 pl-1 sm:pl-2 hover:opacity-85 transition-opacity">
+          <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)] animate-pulse" />
+          <span>RDM</span>
         </a>
 
-        {/* Full Menu Content - dynamically shown */}
-        {showFull && (
-          <nav className="flex gap-4 text-[11px] text-muted-foreground animate-in fade-in-0 slide-in-from-top-1 duration-300">
-            <a href="#work" className="hover:text-foreground transition-colors">Work</a>
-            <a href="#repos" className="hover:text-foreground transition-colors">Repos</a>
-            <a href="#stack" className="hover:text-foreground transition-colors">Stack</a>
-            <a href="#about" className="hover:text-foreground transition-colors">About</a>
-          </nav>
-        )}
+        {/* Full Menu Content - always shown */}
+        <nav className="flex gap-3 sm:gap-5 md:gap-6 text-xs sm:text-sm md:text-[15px] font-semibold text-muted-foreground/90">
+          <a href="#work" className="hover:text-foreground transition-colors py-1">Work</a>
+          <a href="#repos" className="hover:text-foreground transition-colors py-1">Repos</a>
+          <a href="#stack" className="hover:text-foreground transition-colors py-1">Stack</a>
+          <a href="#about" className="hover:text-foreground transition-colors py-1">About</a>
+        </nav>
 
-        {/* Actions - dynamically shown */}
-        {showFull && (
-          <div className="flex items-center gap-3 shrink-0 animate-in fade-in-0 slide-in-from-top-1 duration-300">
-            <button
-              onClick={toggleTheme}
-              className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:border-foreground/30 hover:text-foreground cursor-pointer transition-colors"
-              aria-label="Toggle theme"
-            >
-              <div className="t-icon-swap" data-state={theme === "light" ? "a" : "b"}>
-                <span className="t-icon" data-icon="a">
-                  <Moon className="h-3.5 w-3.5" />
-                </span>
-                <span className="t-icon" data-icon="b">
-                  <Sun className="h-3.5 w-3.5" />
-                </span>
-              </div>
-            </button>
-            <a href="#contact" className="rounded-full bg-primary text-primary-foreground px-3.5 py-1.5 text-[10px] font-medium hover:opacity-90 transition-opacity">
-              Contact
-            </a>
-          </div>
-        )}
+        {/* Actions - always shown */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <button
+            onClick={toggleTheme}
+            className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:border-foreground/30 hover:text-foreground cursor-pointer transition-colors"
+            aria-label="Toggle theme"
+          >
+            <div className="t-icon-swap" data-state={theme === "light" ? "a" : "b"}>
+              <span className="t-icon" data-icon="a">
+                <Moon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
+              </span>
+              <span className="t-icon" data-icon="b">
+                <Sun className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
+              </span>
+            </div>
+          </button>
+          <a href="#contact" className="rounded-full bg-primary text-primary-foreground px-3.5 py-1.5 sm:px-4.5 sm:py-2 text-[10px] sm:text-xs md:text-sm font-bold hover:opacity-90 transition-opacity">
+            Contact
+          </a>
+        </div>
       </div>
     </header>
   );
