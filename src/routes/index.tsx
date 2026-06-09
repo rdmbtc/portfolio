@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { Github, Mail, Linkedin, Check, ArrowUpRight, Star, ExternalLink, Search, X, Sun, Moon } from "lucide-react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 import ScrollSequence from "@/components/ScrollSequence";
 import HorizontalScroll from "@/components/HorizontalScroll";
 import SectionNav from "@/components/SectionNav";
