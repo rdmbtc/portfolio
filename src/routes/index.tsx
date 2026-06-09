@@ -14,6 +14,7 @@ import { useRepoMeta } from "@/hooks/useRepoMeta";
 import Lenis from "lenis";
 import Magnetic from "@/components/Magnetic";
 import SplitTextReveal from "@/components/SplitTextReveal";
+import { Command } from "cmdk";
 
 import { toast, Toaster } from "sonner";
 
