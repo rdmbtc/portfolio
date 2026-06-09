@@ -172,8 +172,30 @@ function Index() {
     return () => window.removeEventListener("scroll", handleScrollProgress);
   }, []);
 
+  const [cmdOpen, setCmdOpen] = useState(false);
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setCmdOpen((o) => !o);
+      }
+    };
+    window.addEventListener("keydown", down);
+    return () => window.removeEventListener("keydown", down);
+  }, []);
+
+  useEffect(() => {
+    const handleToggle = () => setCmdOpen((o) => !o);
+    window.addEventListener("toggle-command-menu", handleToggle);
+    return () => window.removeEventListener("toggle-command-menu", handleToggle);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground relative">
+      {/* Interactive Blueprint Grid Background */}
+      <BackgroundGrid />
+
       {/* Scroll Progress Bar */}
       <div 
         className="fixed top-0 left-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 z-[60] transition-all duration-75"
@@ -196,6 +218,7 @@ function Index() {
       <ProjectModal repo={activeRepo} onOpenChange={(o) => !o && setActiveRepo(null)} />
       <PerfHud />
       <Toaster position="bottom-right" theme="dark" closeButton richColors />
+      <CommandMenu open={cmdOpen} onOpenChange={setCmdOpen} onOpenRepo={setActiveRepo} />
     </div>
   );
 }
@@ -213,6 +236,13 @@ function Nav() {
     } else {
       document.documentElement.classList.remove("dark");
     }
+
+    const syncTheme = () => {
+      const isDark = document.documentElement.classList.contains("dark");
+      setTheme(isDark ? "dark" : "light");
+    };
+    window.addEventListener("theme-change", syncTheme);
+    return () => window.removeEventListener("theme-change", syncTheme);
   }, []);
 
   const toggleTheme = () => {
@@ -224,6 +254,7 @@ function Nav() {
     } else {
       document.documentElement.classList.remove("dark");
     }
+    window.dispatchEvent(new CustomEvent("theme-change"));
   };
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -289,6 +320,18 @@ function Nav() {
 
         {/* Actions - always shown */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <Magnetic>
+            <button
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent("toggle-command-menu"));
+              }}
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card hover:border-foreground/30 text-muted-foreground hover:text-foreground cursor-pointer text-xs font-semibold select-none transition-colors"
+              title="Search and commands (Ctrl+K)"
+            >
+              <span>Search</span>
+              <kbd className="text-[10px] bg-muted/50 border border-border px-1.5 py-0.5 rounded font-mono font-semibold">⌘K</kbd>
+            </button>
+          </Magnetic>
           <Magnetic>
             <button
               onClick={toggleTheme}
@@ -503,15 +546,43 @@ function Hero() {
 }
 
 function Skills() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const ctx = gsap.context(() => {
+      const cards = el.querySelectorAll(".skill-card");
+      gsap.fromTo(
+        cards,
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.05,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    }, el);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section id="stack" className="mx-auto max-w-6xl px-6 py-28">
       <SplitTextReveal eyebrow="Stack" text="A precise, modern toolkit." />
-      <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div ref={containerRef} className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {stack.map((s, i) => (
           <div
             key={s}
-            className="group relative flex items-center justify-between rounded-xl border border-border bg-card px-4 py-4 transition-all hover:border-foreground/20 overflow-hidden"
-            style={{ animationDelay: `${i * 60}ms` }}
+            className="skill-card group relative flex items-center justify-between rounded-xl border border-border bg-card px-4 py-4 transition-all hover:border-foreground/20 overflow-hidden"
             onMouseMove={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
               e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
@@ -750,6 +821,8 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
   const sortContainerRef = useRef<HTMLDivElement>(null);
   const [pillStyle, setPillStyle] = useState<React.CSSProperties>({ left: 0, width: 0, opacity: 0 });
 
+  const gridRef = useRef<HTMLDivElement>(null);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     let list = items.filter((r) => {
@@ -772,6 +845,37 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
   useEffect(() => {
     ScrollTrigger.refresh();
   }, [filtered.length]);
+
+  // ScrollTrigger stagger animation for AllRepos
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+
+    const ctx = gsap.context(() => {
+      const cards = el.querySelectorAll(".repo-card");
+      if (cards.length === 0) return;
+
+      gsap.killTweensOf(cards);
+      gsap.fromTo(
+        cards,
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.03,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    }, el);
+
+    return () => ctx.revert();
+  }, [filtered]);
 
   useEffect(() => {
     const container = sortContainerRef.current;
@@ -873,12 +977,12 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
         {filtered.length} of {repos.length} shown
       </p>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div ref={gridRef} className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((r) => (
           <button
             key={r.name}
             onClick={() => onOpen(r)}
-            className="group relative flex flex-col gap-2 rounded-xl border border-border bg-card p-5 text-left transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-[0_12px_30px_-15px_oklch(0.15_0.005_260_/_0.15)] dark:hover:shadow-[0_12px_30px_-15px_oklch(0.99_0_0_/_0.03)] overflow-hidden"
+            className="repo-card group relative flex flex-col gap-2 rounded-xl border border-border bg-card p-5 text-left transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-[0_12px_30px_-15px_oklch(0.15_0.005_260_/_0.15)] dark:hover:shadow-[0_12px_30px_-15px_oklch(0.99_0_0_/_0.03)] overflow-hidden"
             onMouseMove={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
               e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
@@ -1076,5 +1180,255 @@ function YoutubeIcon({ className }: { className?: string }) {
     <svg className={className} fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
     </svg>
+  );
+}
+
+function BackgroundGrid() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", handleResize);
+
+    const mouse = { x: -1000, y: -1000 };
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+    const handleMouseLeave = () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseleave", handleMouseLeave);
+
+    const dotSpacing = 40;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      const isDark = document.documentElement.classList.contains("dark");
+      
+      const dotColor = isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)";
+      const highlightColor = isDark ? "rgba(168, 85, 247, 0.15)" : "rgba(99, 102, 241, 0.08)";
+
+      const cols = Math.ceil(width / dotSpacing) + 1;
+      const rows = Math.ceil(height / dotSpacing) + 1;
+
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          const originalX = c * dotSpacing;
+          const originalY = r * dotSpacing;
+
+          const dx = mouse.x - originalX;
+          const dy = mouse.y - originalY;
+          const distSq = dx * dx + dy * dy;
+          const dist = Math.sqrt(distSq);
+
+          let drawX = originalX;
+          let drawY = originalY;
+          let radius = 1;
+
+          if (dist < 180) {
+            const force = (180 - dist) / 180;
+            drawX += (dx / dist) * force * 5;
+            drawY += (dy / dist) * force * 5;
+            radius += force * 1.5;
+          }
+
+          ctx.beginPath();
+          ctx.arc(drawX, drawY, radius, 0, Math.PI * 2);
+          
+          if (dist < 150) {
+            const force = (150 - dist) / 150;
+            ctx.fillStyle = isDark
+              ? `rgba(168, 85, 247, ${0.08 + force * 0.35})`
+              : `rgba(99, 102, 241, ${0.06 + force * 0.25})`;
+          } else {
+            ctx.fillStyle = dotColor;
+          }
+          ctx.fill();
+        }
+      }
+
+      if (mouse.x > -500) {
+        ctx.beginPath();
+        const radGrad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 160);
+        radGrad.addColorStop(0, highlightColor);
+        radGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.arc(mouse.x, mouse.y, 160, 0, Math.PI * 2);
+        ctx.fillStyle = radGrad;
+        ctx.fill();
+      }
+
+      animationId = requestAnimationFrame(draw);
+    };
+
+    animationId = requestAnimationFrame(draw);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="fixed inset-0 -z-30 h-full w-full pointer-events-none" />;
+}
+
+function CommandMenu({ 
+  open, 
+  onOpenChange, 
+  onOpenRepo 
+}: { 
+  open: boolean; 
+  onOpenChange: (open: boolean) => void; 
+  onOpenRepo: (repo: Repo) => void;
+}) {
+  const toggleTheme = () => {
+    const currentTheme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+    const nextTheme = currentTheme === "light" ? "dark" : "light";
+    localStorage.setItem("theme", nextTheme);
+    if (nextTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    window.dispatchEvent(new CustomEvent("theme-change"));
+    onOpenChange(false);
+  };
+
+  const togglePerfHud = () => {
+    window.dispatchEvent(new CustomEvent("toggle-perf-hud"));
+    onOpenChange(false);
+  };
+
+  const handleNav = (id: string) => {
+    onOpenChange(false);
+    const element = document.getElementById(id);
+    if (element) {
+      const trigger = ScrollTrigger.getAll().find((st) => st.trigger === element);
+      const target = trigger ? trigger.start : element;
+      if ((window as any).lenis) {
+        (window as any).lenis.scrollTo(target, { duration: 1.5 });
+      } else {
+        if (trigger) {
+          window.scrollTo({ top: trigger.start, behavior: "smooth" });
+        } else {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    }
+  };
+
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success(`${label} copied to clipboard!`);
+    onOpenChange(false);
+  };
+
+  return (
+    <Command.Dialog 
+      open={open} 
+      onOpenChange={onOpenChange} 
+      label="Command Menu"
+      className="t-command-dialog"
+    >
+      <div className="t-command-container">
+        <Command.Input placeholder="Search commands, pages, or builds..." className="t-command-input" />
+        <Command.List className="t-command-list">
+          <Command.Empty className="t-command-empty">No results found.</Command.Empty>
+          
+          <Command.Group heading="Navigation" className="t-command-group">
+            <Command.Item onSelect={() => handleNav("top")} className="t-command-item">
+              <span>Go to Intro</span>
+              <kbd className="t-command-shortcut">G I</kbd>
+            </Command.Item>
+            <Command.Item onSelect={() => handleNav("stack")} className="t-command-item">
+              <span>Go to Stack</span>
+              <kbd className="t-command-shortcut">G S</kbd>
+            </Command.Item>
+            <Command.Item onSelect={() => handleNav("stories")} className="t-command-item">
+              <span>Go to Stories</span>
+              <kbd className="t-command-shortcut">G ST</kbd>
+            </Command.Item>
+            <Command.Item onSelect={() => handleNav("work")} className="t-command-item">
+              <span>Go to Featured Work</span>
+              <kbd className="t-command-shortcut">G W</kbd>
+            </Command.Item>
+            <Command.Item onSelect={() => handleNav("repos")} className="t-command-item">
+              <span>Go to All Repositories</span>
+              <kbd className="t-command-shortcut">G R</kbd>
+            </Command.Item>
+            <Command.Item onSelect={() => handleNav("about")} className="t-command-item">
+              <span>Go to About Me</span>
+              <kbd className="t-command-shortcut">G A</kbd>
+            </Command.Item>
+            <Command.Item onSelect={() => handleNav("contact")} className="t-command-item">
+              <span>Go to Contact</span>
+              <kbd className="t-command-shortcut">G C</kbd>
+            </Command.Item>
+          </Command.Group>
+
+          <Command.Group heading="Socials & Contact" className="t-command-group">
+            <Command.Item onSelect={() => copyToClipboard("rdmstack@gmail.com", "Email")} className="t-command-item">
+              <span>Copy Email (rdmstack@gmail.com)</span>
+            </Command.Item>
+            <Command.Item onSelect={() => copyToClipboard("therdm", "Discord Handle")} className="t-command-item">
+              <span>Copy Discord Username (therdm)</span>
+            </Command.Item>
+            <Command.Item onSelect={() => copyToClipboard("https://www.x.com/@rdmnad", "X Profile Link")} className="t-command-item">
+              <span>Copy X handle Profile Link</span>
+            </Command.Item>
+            <Command.Item onSelect={() => copyToClipboard("https://www.linkedin.com/in/natlusrun/", "LinkedIn Link")} className="t-command-item">
+              <span>Copy LinkedIn Profile Link</span>
+            </Command.Item>
+            <Command.Item onSelect={() => copyToClipboard("https://github.com/rdmbtc", "GitHub Link")} className="t-command-item">
+              <span>Copy GitHub Profile Link</span>
+            </Command.Item>
+          </Command.Group>
+
+          <Command.Group heading="Featured Builds" className="t-command-group">
+            {repos.slice(0, 7).map((r) => (
+              <Command.Item 
+                key={r.name} 
+                onSelect={() => {
+                  onOpenChange(false);
+                  onOpenRepo(r);
+                }} 
+                className="t-command-item"
+              >
+                <span>View {r.name} case study</span>
+                <span className="text-[10px] text-muted-foreground bg-secondary px-1.5 py-0.5 rounded font-mono uppercase font-semibold">{r.language || "Web"}</span>
+              </Command.Item>
+            ))}
+          </Command.Group>
+
+          <Command.Group heading="System Actions" className="t-command-group">
+            <Command.Item onSelect={toggleTheme} className="t-command-item">
+              <span>Toggle Interface Theme (Dark/Light)</span>
+              <kbd className="t-command-shortcut">T T</kbd>
+            </Command.Item>
+            <Command.Item onSelect={togglePerfHud} className="t-command-item">
+              <span>Toggle Performance HUD (FPS monitor)</span>
+              <kbd className="t-command-shortcut">Shift+P</kbd>
+            </Command.Item>
+          </Command.Group>
+        </Command.List>
+      </div>
+    </Command.Dialog>
   );
 }

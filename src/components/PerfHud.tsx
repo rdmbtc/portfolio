@@ -13,8 +13,13 @@ export default function PerfHud() {
     const onKey = (e: KeyboardEvent) => {
       if (e.shiftKey && (e.key === "P" || e.key === "p")) setVisible((v) => !v);
     };
+    const onToggle = () => setVisible((v) => !v);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("toggle-perf-hud", onToggle);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("toggle-perf-hud", onToggle);
+    };
   }, []);
 
   useEffect(() => {
