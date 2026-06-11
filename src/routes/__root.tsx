@@ -12,6 +12,27 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+// Applies the saved (or system) theme before first paint to avoid a
+// light-mode flash when the visitor prefers dark mode.
+const themeInitScript = `(function(){try{var t=localStorage.getItem("theme");var d=t?t==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;if(d)document.documentElement.classList.add("dark");}catch(e){}})();`;
+
+const personJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "RDM",
+  url: "https://therdm.dev",
+  image: "https://avatars.githubusercontent.com/u/114354595?v=4",
+  jobTitle: "Full-stack & Web3 Developer",
+  description:
+    "Full-stack developer building modern web products and Web3 dApps with React, TypeScript, and smart contracts.",
+  sameAs: [
+    "https://github.com/rdmbtc",
+    "https://www.linkedin.com/in/natlusrun/",
+    "https://www.x.com/@rdmnad",
+    "https://youtube.com/@rdmdev",
+  ],
+});
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -77,21 +98,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "RDM — Full-stack Developer · therdm.dev" },
-      { name: "description", content: "Portfolio of RDM — full-stack developer shipping clean, modern web products with React, Next.js, and TypeScript." },
+      { title: "RDM — Full-stack & Web3 Developer · therdm.dev" },
+      { name: "description", content: "Portfolio of RDM — full-stack developer shipping clean, modern web products and Web3 dApps with React, TypeScript, and smart contracts." },
       { name: "author", content: "RDM" },
       { name: "robots", content: "index, follow" },
-      { property: "og:title", content: "RDM — Full-stack Developer" },
-      { property: "og:description", content: "Clean, modern web products. React, Next.js, TypeScript." },
+      { property: "og:title", content: "RDM — Full-stack & Web3 Developer" },
+      { property: "og:description", content: "Clean, modern web products and Web3 dApps. React, TypeScript, smart contracts." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://therdm.dev" },
-      { property: "og:image", content: "https://therdm.dev/bobarcpay.vercel.app.png" },
+      { property: "og:image", content: "https://therdm.dev/og.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@rdmnad" },
       { name: "twitter:creator", content: "@rdmnad" },
-      { name: "twitter:title", content: "RDM — Full-stack Developer" },
-      { name: "twitter:description", content: "Clean, modern web products. React, Next.js, TypeScript." },
-      { name: "twitter:image", content: "https://therdm.dev/bobarcpay.vercel.app.png" },
+      { name: "twitter:title", content: "RDM — Full-stack & Web3 Developer" },
+      { name: "twitter:description", content: "Clean, modern web products and Web3 dApps. React, TypeScript, smart contracts." },
+      { name: "twitter:image", content: "https://therdm.dev/og.png" },
     ],
     links: [
       {
@@ -107,6 +130,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "canonical",
         href: "https://therdm.dev",
       },
+      {
+        rel: "preload",
+        as: "image",
+        href: "/frames/frame_0001.jpg",
+      },
+    ],
+    scripts: [
+      { children: themeInitScript },
+      { type: "application/ld+json", children: personJsonLd },
     ],
   }),
   shellComponent: RootShell,

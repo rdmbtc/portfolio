@@ -24,10 +24,10 @@ import { toast, Toaster } from "sonner";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "RDM — Full-stack Developer · therdm.dev" },
-      { name: "description", content: "Portfolio of RDM — full-stack developer shipping clean, modern web products with React, Next.js, and TypeScript." },
-      { property: "og:title", content: "RDM — Full-stack Developer" },
-      { property: "og:description", content: "Clean, modern web products. React, Next.js, TypeScript." },
+      { title: "RDM — Full-stack & Web3 Developer · therdm.dev" },
+      { name: "description", content: "Portfolio of RDM — full-stack developer shipping clean, modern web products and Web3 dApps with React, TypeScript, and smart contracts." },
+      { property: "og:title", content: "RDM — Full-stack & Web3 Developer" },
+      { property: "og:description", content: "Clean, modern web products and Web3 dApps. React, TypeScript, smart contracts." },
     ],
   }),
   component: Index,
@@ -178,6 +178,16 @@ function Index() {
 
   const [cmdOpen, setCmdOpen] = useState(false);
 
+  // Keep toast styling in sync with the active theme (was hardcoded to dark).
+  const [toastTheme, setToastTheme] = useState<"light" | "dark">("light");
+  useEffect(() => {
+    const sync = () =>
+      setToastTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
+    sync();
+    window.addEventListener("theme-change", sync);
+    return () => window.removeEventListener("theme-change", sync);
+  }, []);
+
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -221,7 +231,7 @@ function Index() {
       </footer>
       <ProjectModal repo={activeRepo} onOpenChange={(o) => !o && setActiveRepo(null)} />
       <PerfHud />
-      <Toaster position="bottom-right" theme="dark" closeButton richColors />
+      <Toaster position="bottom-right" theme={toastTheme} closeButton richColors />
       <CommandMenu open={cmdOpen} onOpenChange={setCmdOpen} onOpenRepo={setActiveRepo} />
     </div>
   );
@@ -769,6 +779,8 @@ function ProjectMockups({ title, screenshots }: { title: string; screenshots?: s
             <img
               src={screenshots[0]}
               alt={title}
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover object-top"
             />
           </div>
@@ -782,6 +794,8 @@ function ProjectMockups({ title, screenshots }: { title: string; screenshots?: s
             <img
               src={screenshots[1]}
               alt={`${title} mobile`}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover object-center"
             />
           </div>
@@ -803,6 +817,8 @@ function ProjectMockups({ title, screenshots }: { title: string; screenshots?: s
         <img
           src={screenshots[0]}
           alt={title}
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
         />
       </div>

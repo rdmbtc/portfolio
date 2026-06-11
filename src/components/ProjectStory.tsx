@@ -222,6 +222,8 @@ function BrowserMock({ title, screenshot }: { title: string; screenshot?: string
           <img
             src={screenshot}
             alt={title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
           />
         ) : (
@@ -243,6 +245,8 @@ function MobileMock({ title, screenshot }: { title: string; screenshot: string }
         <img
           src={screenshot}
           alt={title}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
         />
       </div>
