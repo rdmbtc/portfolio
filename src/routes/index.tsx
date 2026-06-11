@@ -217,6 +217,7 @@ function Index() {
       />
       <Nav />
       <SectionNav sections={navSections} />
+      <div className="grain-overlay" aria-hidden="true" />
       <Hero />
       <Skills />
       <Stats />
@@ -226,8 +227,19 @@ function Index() {
       <AllRepos repos={liveRepos} onOpen={setActiveRepo} />
       <About />
       <Contact />
-      <footer className="border-t border-border py-10 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} RDM · therdm.dev
+      <footer className="relative overflow-hidden border-t border-border pb-10 pt-16">
+        <p
+          aria-hidden="true"
+          className="text-outline pointer-events-none select-none whitespace-nowrap text-center font-display text-[16vw] font-semibold uppercase leading-[0.8] sm:text-[12vw]"
+        >
+          therdm.dev
+        </p>
+        <p className="mt-10 text-center text-sm text-muted-foreground">
+          © {new Date().getFullYear()} RDM — built in the open ·{" "}
+          <a href="https://github.com/rdmbtc/portfolio" target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-foreground">
+            source
+          </a>
+        </p>
       </footer>
       <ProjectModal repo={activeRepo} onOpenChange={(o) => !o && setActiveRepo(null)} />
       <PerfHud />
@@ -504,52 +516,59 @@ function Hero() {
         framePath={heroFramePath}
         canvasClassName="filter blur-[10px] scale-105 brightness-[1.02] opacity-55 dark:brightness-[0.25] dark:opacity-100 transition-all duration-300"
       >
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 pointer-events-none z-20">
-          <div className={`w-[90%] max-w-6xl pointer-events-auto t-stagger ${isShown ? "is-shown" : ""} p-8 sm:p-12 md:p-14 rounded-[32px] border border-border/60 bg-background/55 dark:bg-background/25 backdrop-blur-2xl shadow-[0_24px_60px_-15px_oklch(0.15_0.005_260_/_0.05)] dark:shadow-[0_24px_60px_-15px_rgba(0,0,0,0.45)]`}>
-            <div className="flex flex-col-reverse md:flex-row items-center gap-8 md:gap-12 w-full">
-              {/* Left Column: Text Content */}
-              <div className="flex-1 min-w-0 w-full text-left">
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1 text-xs text-foreground/80 dark:text-muted-foreground backdrop-blur-md t-stagger-line t-stagger-line--1">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Available for new work · Q3 2026
-                </div>
-                <h1 className="text-balance text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight t-stagger-line t-stagger-line--2 leading-[1.15] text-foreground">
-                  Clean, modern web products,<br />
-                  <span>shipped </span>
-                  <span
-                    key={phraseIdx}
-                    className="inline-block bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-text-swap"
-                  >
-                    {phrases[phraseIdx]}
-                  </span>
-                </h1>
-                <p className="mt-6 max-w-2xl text-balance text-sm sm:text-base md:text-lg text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--3 leading-relaxed">
-                  I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.
-                </p>
-                <p className="mt-4 text-sm sm:text-base text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--4">
-                  <span className="typing-hero font-mono text-sm sm:text-base">therdm.dev</span>
-                </p>
-              </div>
+        <div className="absolute inset-0 z-20 flex flex-col px-6 pointer-events-none sm:px-10 lg:px-16">
+          {/* Readability scrim over the frame sequence */}
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-background via-background/35 to-background/20 dark:from-background dark:via-background/30 dark:to-transparent" />
 
-              {/* Right Column: GitHub PFP with animated gradient glow */}
-              <div className="shrink-0 flex justify-center w-full md:w-auto">
-                <div className="relative group">
-                  <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-40 blur-xl transition duration-1000 group-hover:opacity-75 group-hover:duration-200" />
-                  <img
-                    src="https://avatars.githubusercontent.com/u/114354595?v=4"
-                    alt="Dr RDM Github Profile"
-                    className="relative h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 rounded-full border-2 border-border/80 object-cover shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]"
-                  />
+          <div className={`flex h-full w-full flex-col justify-between pb-24 pt-28 t-stagger ${isShown ? "is-shown" : ""}`}>
+            {/* Top meta row */}
+            <div className="t-stagger-line t-stagger-line--1"><div className="flex items-start justify-between gap-6">
+              <div className="pointer-events-auto inline-flex items-center gap-3">
+                <img
+                  src="https://avatars.githubusercontent.com/u/114354595?v=4"
+                  alt="Dr RDM GitHub profile"
+                  className="h-12 w-12 rounded-full border border-border/80 object-cover shadow-lg sm:h-14 sm:w-14"
+                />
+                <div>
+                  <p className="font-display text-base font-semibold leading-none sm:text-lg">RDM</p>
+                  <p className="mt-1 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:text-[11px]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Available · Q3 2026
+                  </p>
                 </div>
               </div>
+              <p className="hidden max-w-[210px] text-right font-mono text-[11px] uppercase leading-relaxed tracking-[0.2em] text-muted-foreground md:block">
+                Full-stack &amp; Web3
+                <br />
+                React · TypeScript · Solidity
+              </p>
+            </div></div>
+
+            {/* Bottom editorial lockup */}
+            <div className="pointer-events-auto">
+              <h1 className="t-stagger-line t-stagger-line--2 max-w-5xl text-[13vw] font-semibold leading-[0.95] tracking-tight sm:text-7xl md:text-8xl lg:text-[6.5rem]">
+                Clean, modern
+                <br />
+                web products,
+                <br />
+                <span className="text-foreground/90">shipped&nbsp;</span>
+                <span key={phraseIdx} className="text-gradient inline-block animate-text-swap italic">
+                  {phrases[phraseIdx]}
+                </span>
+              </h1>
+              <div className="t-stagger-line t-stagger-line--3 mt-8 border-t border-border/60 pt-5"><div className="flex flex-wrap items-end justify-between gap-6">
+                <p className="max-w-md text-sm leading-relaxed text-foreground/85 dark:text-muted-foreground sm:text-base">
+                  I'm RDM — a full-stack developer building fast, considered interfaces and dApps with React, TypeScript and Solidity.
+                </p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted-foreground sm:text-xs">
+                  <span className="typing-hero">therdm.dev</span>
+                </p>
+              </div></div>
             </div>
           </div>
 
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
-            <p className="rounded-full border border-border/70 bg-background/70 px-4 py-1.5 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-foreground/80 dark:text-muted-foreground backdrop-blur-md">
-              scroll-driven · 240 frames · canvas
-            </p>
-            <p className="animate-bounce font-mono text-[11px] sm:text-xs uppercase tracking-widest text-foreground/75 dark:text-muted-foreground/85">
+          <div className="absolute bottom-7 left-1/2 -translate-x-1/2 pointer-events-none">
+            <p className="animate-bounce font-mono text-[11px] uppercase tracking-[0.3em] text-foreground/70 dark:text-muted-foreground/85 sm:text-xs">
               ↓ scroll
             </p>
           </div>
@@ -591,7 +610,7 @@ function Skills() {
 
   return (
     <section id="stack" className="mx-auto max-w-6xl px-6 py-28">
-      <SplitTextReveal eyebrow="Stack" text="A precise, modern toolkit." />
+      <SplitTextReveal eyebrow="01 · Stack" text="A precise, modern toolkit." />
       <div ref={containerRef} className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {stack.map((s, i) => (
           <div
@@ -631,7 +650,7 @@ function Stats() {
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px bg-border sm:grid-cols-4">
         {stats.map((s) => (
           <div key={s.label} className="bg-background px-6 py-10 text-center">
-            <div className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            <div className="font-display text-4xl font-semibold sm:text-6xl text-gradient">
               <span className={`t-digit-group ${isAnimating ? "is-animating" : ""}`}>
                 {s.value.split("").map((char, index) => (
                   <span key={index} className="t-digit" data-stagger={index + 1}>
@@ -652,11 +671,14 @@ function Marquee() {
   const tags = ["React", "Next.js", "TypeScript", "Three.js", "Tailwind", "GSAP", "Solidity", "Web3", "Node.js", "Vite", "Edge", "Postgres"];
   const loop = [...tags, ...tags];
   return (
-    <section className="relative overflow-hidden border-b border-border py-8">
-      <div className="flex gap-12 whitespace-nowrap [animation:marquee_40s_linear_infinite]">
+    <section className="relative overflow-hidden border-b border-border py-10">
+      <div className="flex items-baseline gap-10 whitespace-nowrap [animation:marquee_50s_linear_infinite]">
         {loop.map((t, i) => (
-          <span key={i} className="font-mono text-2xl text-muted-foreground/90 sm:text-3xl">
-            {t} <span className="text-foreground/20">·</span>
+          <span
+            key={i}
+            className={`font-display text-5xl font-semibold uppercase sm:text-7xl transition-colors duration-300 ${i % 2 === 0 ? "text-outline hover:text-foreground" : "text-foreground/80"}`}
+          >
+            {t}<span className="text-gradient px-6 text-4xl sm:text-6xl">✦</span>
           </span>
         ))}
       </div>
@@ -668,7 +690,7 @@ function ProjectStories({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: R
   return (
     <section id="stories" className="relative">
       <div className="mx-auto max-w-6xl px-6 pb-12 pt-28 text-center">
-        <SplitTextReveal eyebrow="Stories" text="Per-project scroll-scrub stories." center />
+        <SplitTextReveal eyebrow="02 · Stories" text="Per-project scroll-scrub stories." center />
         <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">
           Each featured build gets its own pinned section. Keep scrolling — the frames slide horizontally as the story unfolds.
         </p>
@@ -684,7 +706,7 @@ function FeaturedShowcase({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r:
   return (
     <>
       <div id="work" className="mx-auto max-w-6xl px-6 pb-2 pt-28">
-        <SplitTextReveal eyebrow="Featured" text="Selected work, side by side." />
+        <SplitTextReveal eyebrow="03 · Featured" text="Selected work, side by side." />
         <p className="mt-4 max-w-xl text-sm text-muted-foreground">
           Scroll → to drift through featured builds. Each one ships live and lives in the open on GitHub.
         </p>
@@ -693,12 +715,15 @@ function FeaturedShowcase({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r:
         {items.map((r) => (
           <article
             key={r.name}
-            className="group flex h-[70vh] w-[78vw] shrink-0 cursor-pointer flex-col overflow-hidden rounded-3xl border border-border bg-card transition-colors hover:border-foreground/30 sm:w-[55vw] lg:w-[42vw]"
+            className="group relative flex h-[70vh] w-[78vw] shrink-0 cursor-pointer flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-[0_0_0_1.5px_var(--card-border-glow),0_24px_60px_-20px_var(--card-glow)] sm:w-[55vw] lg:w-[42vw]"
             onClick={() => onOpen(r)}
           >
             <div className="relative flex-1 overflow-hidden bg-gradient-to-br from-secondary via-muted to-secondary bg-background bg-gradient-to-br">
               <ProjectMockups title={r.name} screenshots={r.screenshots} />
             </div>
+            <span className="text-outline pointer-events-none absolute right-4 top-2 z-10 font-display text-6xl font-semibold sm:text-7xl">
+              {String(items.indexOf(r) + 1).padStart(2, "0")}
+            </span>
             <div className="flex items-end justify-between gap-4 border-t border-border p-6">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs uppercase tracking-widest text-muted-foreground">
@@ -920,7 +945,7 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
   return (
     <section id="repos" className="mx-auto max-w-6xl px-6 py-28">
       <div className="flex items-end justify-between gap-6">
-        <SplitTextReveal eyebrow={`All · ${items.length}`} text="Everything in the open." />
+        <SplitTextReveal eyebrow={`04 · All ${items.length} repos`} text="Everything in the open." />
         <a href="https://github.com/rdmbtc?tab=repositories" target="_blank" rel="noreferrer"
            className="hidden items-center gap-2 text-sm text-muted-foreground hover:text-foreground sm:inline-flex">
           github.com/rdmbtc <ArrowUpRight className="h-4 w-4" />
@@ -1053,7 +1078,7 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
 function About() {
   return (
     <section id="about" className="mx-auto max-w-3xl px-6 py-28">
-      <SplitTextReveal eyebrow="About" text="About Me" />
+      <SplitTextReveal eyebrow="05 · About" text="About Me" />
       <p className="mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground">
         I’m Dr RDM, a passionate Web3 developer specializing in smart contracts, React, and decentralized applications (dApps). I thrive on building and testing projects in testnets, exploring the cutting edge of blockchain technology. With 2k followers on YouTube (
         <a 
@@ -1122,8 +1147,11 @@ function Contact() {
 
   return (
     <section id="contact" className="mx-auto max-w-3xl px-6 py-28 text-center">
-      <SplitTextReveal eyebrow="Contact" text="Let's build together." center />
-      <p className="mx-auto mt-6 max-w-md text-muted-foreground">
+      <SplitTextReveal eyebrow="06 · Contact" text="Have an idea?" center />
+      <p className="font-display mx-auto -mt-2 text-4xl font-semibold leading-[1.05] sm:text-5xl md:text-6xl">
+        <span className="text-gradient italic">Let's build it.</span>
+      </p>
+      <p className="mx-auto mt-8 max-w-md text-muted-foreground">
         Got a project in mind, or just want to chat? I reply to every message.
       </p>
       <div className="mt-10 flex flex-col items-center gap-6">
