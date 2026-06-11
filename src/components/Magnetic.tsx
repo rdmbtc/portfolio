@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 
 interface Props {
-  children: React.ReactElement;
+  children: React.ReactElement<{ ref?: React.Ref<HTMLElement> }>;
   radius?: number;
   strength?: number;
 }

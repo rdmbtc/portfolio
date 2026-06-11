@@ -22,7 +22,7 @@ export const repos: Repo[] = [
     homepage: "https://pulsmarket.tech", 
     tags: t("web3","mobile","fintech","wallet"), 
     readme: "Puls is a mobile-first prediction market built on the Arc Testnet. It abstracts crypto complexity with a Google sign-in flow that provisions a Circle MPC wallet behind the scenes — users trade Polymarket-style predictions using USDC as gas. Built with Flutter for cross-platform delivery, integrated with Circle's programmable wallets, and live at pulsmarket.tech.",
-    screenshots: ["/pulsmarket.tech.png", "/pulsmarket.tech mobile.png"]
+    screenshots: ["/shots/puls-desktop.webp", "/shots/puls-mobile.webp"]
   },
   { 
     name: "MonDefense", 
@@ -33,18 +33,18 @@ export const repos: Repo[] = [
     homepage: "https://mondefense.vercel.app", 
     tags: t("game","web3","monad"), 
     readme: "Tower defense game built for Monad Mission 7. Deploy towers, defend the chain, climb the leaderboard. Vanilla JS canvas rendering with on-chain score submission.",
-    screenshots: ["/mondefense.vercel.app_(pc).png"]
+    screenshots: ["/shots/mondefense.webp"]
   },
   { 
     name: "BobArcPay", 
     description: "AI payment agent on Arc testnet. Link your Twitter handle and send USDC with a tweet reply.", 
     language: "TypeScript", 
     stars: 1, 
-    url: "https://github.com/rdmbtc/bobarcpay", 
+    url: "https://github.com/rdmbtc/bob", 
     homepage: "https://bobarcpay.vercel.app", 
     tags: t("web3","agent","circle-wallets","payments"), 
     readme: "BobArcPay is an automated Twitter payment agent built on the Arc Testnet. Users link their Twitter handles to their Arc wallets, allowing them to send testnet USDC simply by replying to posts with '@bobarcpay send 20 usdc'. The agent processes transfers securely using Circle programmable wallets and responds with transaction receipts and explorer links.",
-    screenshots: ["/bobarcpay.vercel.app.png"]
+    screenshots: ["/shots/bobarcpay.webp"]
   },
   { 
     name: "Hivemind", 
@@ -55,7 +55,7 @@ export const repos: Repo[] = [
     homepage: "https://hivemind-theta.vercel.app", 
     tags: t("ai","platform","collab"),
     readme: "Hivemind is a decentralized collective intelligence platform that aggregates community wisdom for decision-making. Built with React and TypeScript, Hivemind integrates AI agents to synthesize discussions and generate consensus reports dynamically on-chain.",
-    screenshots: ["/hivemind-protocol.vercel.app_(pc).png"]
+    screenshots: ["/shots/hivemind.webp"]
   },
   { 
     name: "RitualPulse", 
@@ -66,7 +66,7 @@ export const repos: Repo[] = [
     homepage: "https://ritual-pulse-five.vercel.app", 
     tags: t("productivity","tracker","mobile"),
     readme: "RitualPulse is an elegant daily habit tracker designed to help users build consistent routines. Features interactive calendar heatmaps, customizable reminder pulses, and visual performance tracking logs with local secure state persistence.",
-    screenshots: ["/ritualblocks.vercel.app_(pc) (2).png"]
+    screenshots: ["/shots/ritualpulse.webp"]
   },
   { 
     name: "RitualScroll", 
@@ -77,7 +77,7 @@ export const repos: Repo[] = [
     homepage: "https://ritual-scroll.vercel.app", 
     tags: t("storytelling","animation","gsap"),
     readme: "RitualScroll is an immersive, scroll-driven storytelling web experience. Showcases advanced typography setups and fluid canvas-rendering scroll scrub loops built using GSAP, ScrollTrigger, and Tailwind CSS.",
-    screenshots: ["/ritualscroll.vercel.app_(pc) (1).png"]
+    screenshots: ["/shots/ritualscroll.webp"]
   },
   { 
     name: "RitCode", 
@@ -88,7 +88,7 @@ export const repos: Repo[] = [
     homepage: "https://rit-code.vercel.app", 
     tags: t("editor","tool","dx"),
     readme: "RitCode is a high-performance online code editor playground. Enables developers to write, compile, and preview code snippets in real-time with full syntax highlighting, automatic error linting, and sandboxed execution environments.",
-    screenshots: ["/rit-code.png"]
+    screenshots: ["/shots/ritcode.webp"]
   },
   { name: "RitDefense", description: "Tower defense game in JS.", language: "JavaScript", stars: 0, url: "https://github.com/rdmbtc/RitDefense", homepage: "https://rit-defense.vercel.app", tags: t("game") },
   { name: "riteforge", description: "Forging workflows for builders.", language: "TypeScript", stars: 0, url: "https://github.com/rdmbtc/riteforge", homepage: "https://riteforge.vercel.app", tags: t("tool","productivity") },
@@ -97,7 +97,7 @@ export const repos: Repo[] = [
   { name: "PolyNEX", description: "Polymarket-style trading UI.", language: "JavaScript", stars: 0, url: "https://github.com/rdmbtc/PolyNEX", homepage: "https://poly-nex.vercel.app", tags: t("fintech","web3","ui") },
   { name: "proofQuest", description: "Zero-knowledge proof quest app.", language: "JavaScript", stars: 0, url: "https://github.com/rdmbtc/proofQuest", homepage: "https://proof-quest.vercel.app", tags: t("zk","web3","quest") },
   { name: "edgensQuests", description: "Quest platform for Edgen ecosystem.", language: "TypeScript", stars: 0, url: "https://github.com/rdmbtc/edgensQuests", homepage: "https://edgens-quests.vercel.app", tags: t("quest","platform") },
-  { name: "edgen-factory", description: "Factory tooling for Edgen.", language: "TypeScript", stars: 0, url: "https://github.com/rdmbtc/edgen-factory", homepage: "https://edgen-factory.vercel.app", tags: t("tool","platform") },
+  { name: "edgen-factory", description: "Factory tooling for Edgen.", language: "TypeScript", stars: 0, url: "https://github.com/rdmbtc/edgen-factory", homepage: null, tags: t("tool","platform") },
   { name: "edgen-novella", description: "Visual novella in the Edgen world.", language: "JavaScript", stars: 0, url: "https://github.com/rdmbtc/edgen-novella", homepage: "https://edgen-novella.vercel.app", tags: t("game","storytelling") },
   { name: "edgenos-simulator", description: "EdgenOS desktop simulator.", language: "JavaScript", stars: 0, url: "https://github.com/rdmbtc/edgenos-simulator", homepage: "https://edgenos-simulator.vercel.app", tags: t("experiment","ui") },
   { name: "solcasenft", description: "Solana NFT showcase.", language: "CSS", stars: 0, url: "https://github.com/rdmbtc/solcasenft", homepage: "https://solcasenft.vercel.app", tags: t("web3","nft","solana") },
