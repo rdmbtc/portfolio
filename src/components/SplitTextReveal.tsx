@@ -59,12 +59,12 @@ export default function SplitTextReveal({ text, className = "", eyebrow, center 
   return (
     <div ref={containerRef} className={`${center ? "text-center" : "text-left"} ${className}`}>
       {eyebrow && (
-        <p className="eyebrow font-mono text-xs sm:text-sm font-semibold uppercase tracking-widest text-muted-foreground opacity-0">
+        <p className={`eyebrow section-label font-mono text-xs sm:text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground opacity-0 ${center ? "justify-center" : ""}`}>
           {eyebrow}
         </p>
       )}
       <h2 
-        className={`mt-3 text-3xl font-semibold tracking-tight sm:text-4xl flex flex-wrap ${center ? "justify-center" : "justify-start"} leading-tight text-foreground`}
+        className={`font-display mt-4 text-4xl font-semibold sm:text-5xl md:text-6xl flex flex-wrap ${center ? "justify-center" : "justify-start"} leading-[1.05] text-foreground`}
         aria-label={text}
       >
         <span className="sr-only">{text}</span>
