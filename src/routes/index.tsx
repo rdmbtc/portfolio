@@ -34,8 +34,18 @@ export const Route = createFileRoute("/")({
 });
 
 const stack = [
-  "React", "Next.js", "TypeScript", "Tailwind",
-  "GSAP", "Node.js", "PostgreSQL", "tRPC",
+  { name: "React", icon: "⚛" },
+  { name: "Next.js", icon: "▲" },
+  { name: "TypeScript", icon: "TS" },
+  { name: "Tailwind", icon: "🌊" },
+  { name: "GSAP", icon: "◆" },
+  { name: "Node.js", icon: "⬡" },
+  { name: "PostgreSQL", icon: "🐘" },
+  { name: "tRPC", icon: "⇄" },
+  { name: "Solidity", icon: "⧫" },
+  { name: "Web3", icon: "🔗" },
+  { name: "Vite", icon: "⚡" },
+  { name: "Docker", icon: "🐳" },
 ];
 
 const langColor: Record<string, string> = {
@@ -51,15 +61,15 @@ const langColor: Record<string, string> = {
 const stats = [
   { value: repos.length.toString(), label: "Public repos" },
   { value: "20+", label: "Live deployments" },
-  { value: "6", label: "Years building" },
-  { value: "∞", label: "Coffees consumed" },
+  { value: "6+", label: "Years building" },
+  { value: "14", label: "Tech mastered" },
 ];
 
 const timeline = [
-  { year: "2020", title: "First React project", body: "Discovered components and never looked back." },
-  { year: "2022", title: "Full-stack development", body: "Shipped production apps with Next.js, Postgres, and tRPC." },
-  { year: "2024", title: "Freelance & open source", body: "Started taking on client work and contributing to OSS." },
-  { year: "2025", title: "therdm.dev launch", body: "Consolidated everything into a single home on the web." },
+  { year: "2020", title: "First React project", body: "Discovered component-driven architecture and fell in love with the DX. Built my first SPA and never looked back." },
+  { year: "2022", title: "Full-stack development", body: "Shipped production apps with Next.js, Postgres, and tRPC. Learned the value of type-safety across the entire stack." },
+  { year: "2024", title: "Web3 & freelance", body: "Deep-dived into smart contracts, Circle MPC wallets, and on-chain UX. Started taking on client work and contributing to OSS." },
+  { year: "2025", title: "therdm.dev launch", body: "Consolidated everything into a single home on the web — this portfolio, open-source projects, and a growing YouTube community." },
 ];
 
 const navSections = [
@@ -226,8 +236,57 @@ function Index() {
       <AllRepos repos={liveRepos} onOpen={setActiveRepo} />
       <About />
       <Contact />
-      <footer className="border-t border-border py-10 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} RDM · therdm.dev
+      <footer className="border-t border-border bg-secondary/20">
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <div className="grid gap-10 sm:grid-cols-3">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-2 text-lg font-bold tracking-tight">
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)] animate-pulse" />
+                RDM
+              </div>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-xs">
+                Full-stack &amp; Web3 developer shipping clean, modern web products.
+              </p>
+            </div>
+            {/* Quick links */}
+            <div>
+              <h4 className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-4">Navigate</h4>
+              <nav className="flex flex-col gap-2.5">
+                {navSections.filter(s => s.id !== "top").map((s) => (
+                  <a key={s.id} href={`#${s.id}`} className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit">{s.label}</a>
+                ))}
+              </nav>
+            </div>
+            {/* Socials */}
+            <div>
+              <h4 className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-4">Connect</h4>
+              <div className="flex flex-col gap-2.5">
+                <a href="https://github.com/rdmbtc" target="_blank" rel="noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit flex items-center gap-2"><Github className="h-3.5 w-3.5" /> GitHub</a>
+                <a href="https://www.linkedin.com/in/natlusrun/" target="_blank" rel="noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit flex items-center gap-2"><Linkedin className="h-3.5 w-3.5" /> LinkedIn</a>
+                <a href="https://www.x.com/@rdmnad" target="_blank" rel="noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit flex items-center gap-2"><TwitterIcon className="h-3.5 w-3.5" /> X (Twitter)</a>
+                <a href="https://youtube.com/@rdmdev" target="_blank" rel="noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit flex items-center gap-2"><YoutubeIcon className="h-3.5 w-3.5" /> YouTube</a>
+                <a href="mailto:rdmstack@gmail.com" className="text-sm text-muted-foreground hover:text-foreground transition-colors w-fit flex items-center gap-2"><Mail className="h-3.5 w-3.5" /> Email</a>
+              </div>
+            </div>
+          </div>
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border pt-8">
+            <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} RDM &middot; therdm.dev</p>
+            <button
+              onClick={() => {
+                if ((window as any).lenis) {
+                  (window as any).lenis.scrollTo(0, { duration: 1.5 });
+                } else {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}
+              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group"
+            >
+              Back to top
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5" />
+            </button>
+          </div>
+        </div>
       </footer>
       <ProjectModal repo={activeRepo} onOpenChange={(o) => !o && setActiveRepo(null)} />
       <PerfHud />
@@ -509,9 +568,12 @@ function Hero() {
             <div className="flex flex-col-reverse md:flex-row items-center gap-8 md:gap-12 w-full">
               {/* Left Column: Text Content */}
               <div className="flex-1 min-w-0 w-full text-left">
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1 text-xs text-foreground/80 dark:text-muted-foreground backdrop-blur-md t-stagger-line t-stagger-line--1">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Available for new work · Q3 2026
+                <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-1.5 text-xs text-foreground/80 dark:text-muted-foreground backdrop-blur-md t-stagger-line t-stagger-line--1">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-badge-pulse absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                  </span>
+                  Available for new work &middot; Q3 2026
                 </div>
                 <h1 className="text-balance text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight t-stagger-line t-stagger-line--2 leading-[1.15] text-foreground">
                   Clean, modern web products,<br />
@@ -526,9 +588,24 @@ function Hero() {
                 <p className="mt-6 max-w-2xl text-balance text-sm sm:text-base md:text-lg text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--3 leading-relaxed">
                   I'm RDM — a full-stack developer building fast, considered interfaces with React, Next.js and TypeScript.
                 </p>
-                <p className="mt-4 text-sm sm:text-base text-foreground/85 dark:text-muted-foreground t-stagger-line t-stagger-line--4">
-                  <span className="typing-hero font-mono text-sm sm:text-base">therdm.dev</span>
-                </p>
+                <div className="mt-6 flex flex-col sm:flex-row items-start gap-3 t-stagger-line t-stagger-line--4">
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:scale-[1.02] hover:shadow-lg"
+                  >
+                    Let's work together
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                  <a
+                    href="https://github.com/rdmbtc"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-medium transition-colors hover:border-foreground/30"
+                  >
+                    <Github className="h-4 w-4" />
+                    View GitHub
+                  </a>
+                </div>
               </div>
 
               {/* Right Column: GitHub PFP with animated gradient glow */}
@@ -592,11 +669,14 @@ function Skills() {
   return (
     <section id="stack" className="mx-auto max-w-6xl px-6 py-28">
       <SplitTextReveal eyebrow="Stack" text="A precise, modern toolkit." />
-      <div ref={containerRef} className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {stack.map((s, i) => (
+      <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground">
+        Technologies I reach for when building production apps — from rapid prototyping to shipped products at scale.
+      </p>
+      <div ref={containerRef} className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {stack.map((s) => (
           <div
-            key={s}
-            className="skill-card group relative flex items-center justify-between rounded-xl border border-border bg-card px-4 py-4 transition-all hover:border-foreground/20 overflow-hidden"
+            key={s.name}
+            className="skill-card group relative flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-4 transition-all hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-lg overflow-hidden"
             onMouseMove={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
               e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
@@ -609,10 +689,10 @@ function Skills() {
                 background: `radial-gradient(150px circle at var(--x, 0px) var(--y, 0px), var(--color-spotlight), transparent 85%)`,
               }}
             />
-            <div className="relative z-10 flex items-center justify-between w-full">
-              <span className="text-sm font-medium">{s}</span>
-              <Check className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-emerald-500" strokeWidth={2.5} />
+            <div className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-sm font-bold text-muted-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+              {s.icon}
             </div>
+            <span className="relative z-10 text-sm font-medium">{s.name}</span>
           </div>
         ))}
       </div>
@@ -653,10 +733,12 @@ function Marquee() {
   const loop = [...tags, ...tags];
   return (
     <section className="relative overflow-hidden border-b border-border py-8">
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
       <div className="flex gap-12 whitespace-nowrap [animation:marquee_40s_linear_infinite]">
         {loop.map((t, i) => (
           <span key={i} className="font-mono text-2xl text-muted-foreground/90 sm:text-3xl">
-            {t} <span className="text-foreground/20">·</span>
+            {t} <span className="text-foreground/20">&middot;</span>
           </span>
         ))}
       </div>
@@ -1050,12 +1132,43 @@ function AllRepos({ repos: items, onOpen }: { repos: Repo[]; onOpen: (r: Repo) =
   );
 }
 
+const skillBars = [
+  { label: "React / Next.js", pct: 95 },
+  { label: "TypeScript", pct: 92 },
+  { label: "Tailwind CSS", pct: 90 },
+  { label: "Node.js / tRPC", pct: 85 },
+  { label: "Web3 / Solidity", pct: 80 },
+  { label: "PostgreSQL", pct: 78 },
+];
+
 function About() {
+  const barsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = barsRef.current;
+    if (!el) return;
+    const ctx = gsap.context(() => {
+      const bars = el.querySelectorAll(".skill-bar-fill");
+      gsap.fromTo(
+        bars,
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          duration: 1,
+          stagger: 0.08,
+          ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none none" },
+        }
+      );
+    }, el);
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section id="about" className="mx-auto max-w-3xl px-6 py-28">
       <SplitTextReveal eyebrow="About" text="About Me" />
       <p className="mt-6 text-base sm:text-lg leading-relaxed text-muted-foreground">
-        I’m Dr RDM, a passionate Web3 developer specializing in smart contracts, React, and decentralized applications (dApps). I thrive on building and testing projects in testnets, exploring the cutting edge of blockchain technology. With 2k followers on YouTube (
+        I'm RDM — a full-stack &amp; Web3 developer who ships fast, considered interfaces. I specialize in React, TypeScript, and smart contract integrations, building everything from prediction markets to tower defense games. With a growing open-source footprint and a YouTube channel (
         <a 
           href="https://youtube.com/@rdmdev" 
           target="_blank" 
@@ -1064,12 +1177,33 @@ function About() {
         >
           @rdmdev
         </a>
-        ), I love sharing my journey and knowledge with the community.
+        ) where I share my build process, I believe great software comes from shipping relentlessly and learning publicly.
       </p>
+
+      {/* Skill bars */}
+      <div ref={barsRef} className="mt-12 space-y-4">
+        <h3 className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">Core proficiency</h3>
+        {skillBars.map((s) => (
+          <div key={s.label}>
+            <div className="flex items-center justify-between text-sm mb-1.5">
+              <span className="font-medium">{s.label}</span>
+              <span className="font-mono text-xs text-muted-foreground">{s.pct}%</span>
+            </div>
+            <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
+              <div
+                className="skill-bar-fill h-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 origin-left"
+                style={{ width: `${s.pct}%` }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Timeline */}
       <div className="mt-16 space-y-10 border-l border-border pl-8">
         {timeline.map((t) => (
           <div key={t.year} className="relative">
-            <span className="absolute -left-[33px] top-1.5 h-2 w-2 rounded-full bg-foreground ring-4 ring-background" />
+            <span className="absolute -left-[calc(2rem+1px)] top-1.5 h-2.5 w-2.5 rounded-full bg-foreground ring-4 ring-background" />
             <div className="font-mono text-xs sm:text-sm font-bold text-muted-foreground">{t.year}</div>
             <h3 className="mt-1 font-semibold tracking-tight">{t.title}</h3>
             <p className="mt-1 text-sm text-muted-foreground">{t.body}</p>
@@ -1130,12 +1264,14 @@ function Contact() {
         <Magnetic radius={60} strength={0.4}>
           <a
             href="mailto:rdmstack@gmail.com"
-            className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:scale-[1.02] hover:shadow-[0_10px_30px_-10px_oklch(0.15_0.005_260_/_0.4)]"
+            className="group relative inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-primary-foreground transition-all hover:scale-[1.02] hover:shadow-[0_10px_30px_-10px_oklch(0.15_0.005_260_/_0.4)]"
           >
-            Let's build together
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
+            <span className="relative">Get in touch</span>
+            <ArrowUpRight className="relative h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
         </Magnetic>
+        <p className="text-xs text-muted-foreground font-mono">rdmstack@gmail.com</p>
         <div className="flex items-center gap-2 t-avatar-group">
           {links.map((link, i) => (
             <div

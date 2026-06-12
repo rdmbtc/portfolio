@@ -1057,6 +1057,31 @@ h1, h2, h3, .char, .typing-hero {
   animation: textSwapper 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Availability badge pulse */
+@keyframes badge-pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.animate-badge-pulse {
+  animation: badge-pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* CTA shimmer hover effect */
+@keyframes cta-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.group:hover .animate-cta-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: cta-shimmer 1.5s ease-in-out infinite;
+}
+
+/* Skill bar fill animation handled by GSAP */
+
 @media (prefers-reduced-motion: reduce) {
   .animate-text-swap {
     animation: none !important;
